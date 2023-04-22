@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{6DA61135-B392-45F6-AEA1-C385C5108A85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tisa.Store", "Apps\Tisa.Store\Tisa.Store.csproj", "{2F95C299-A249-4E87-80B2-F662BC09D771}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tisa.Store.Web", "Apps\Tisa.Store.Web\Tisa.Store.Web.csproj", "{B7DF8973-CB2D-4AB0-911D-4B071489F93C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F95C299-A249-4E87-80B2-F662BC09D771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F95C299-A249-4E87-80B2-F662BC09D771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F95C299-A249-4E87-80B2-F662BC09D771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F95C299-A249-4E87-80B2-F662BC09D771}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7DF8973-CB2D-4AB0-911D-4B071489F93C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7DF8973-CB2D-4AB0-911D-4B071489F93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7DF8973-CB2D-4AB0-911D-4B071489F93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7DF8973-CB2D-4AB0-911D-4B071489F93C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2F95C299-A249-4E87-80B2-F662BC09D771} = {6DA61135-B392-45F6-AEA1-C385C5108A85}
+		{B7DF8973-CB2D-4AB0-911D-4B071489F93C} = {6DA61135-B392-45F6-AEA1-C385C5108A85}
+	EndGlobalSection
+EndGlobal
