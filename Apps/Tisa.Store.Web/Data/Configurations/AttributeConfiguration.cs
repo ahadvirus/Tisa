@@ -15,5 +15,9 @@ public class AttributeConfiguration : IEntityTypeConfiguration<Attribute>
 
         builder.Property(attribute => attribute.Title)
             .IsRequired();
+
+        builder.HasMany(attribute => attribute.Products)
+            .WithOne(product => product.Attribute)
+            .HasForeignKey(product => product.AttributeId);
     }
 }
