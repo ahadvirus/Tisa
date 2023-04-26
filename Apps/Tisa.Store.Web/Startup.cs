@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tisa.Store.Web.Data.Contexts;
+using Tisa.Store.Web.Infrastructures.Extensions;
 
 namespace Tisa.Store.Web;
 
@@ -39,6 +40,8 @@ public class Startup
 
         services.Configure<JsonOptions>(options => { options.SerializerOptions.PropertyNameCaseInsensitive = false; });
 
+        services.AddAutoMapper(typeof(Startup).Assembly);
+
         services.AddControllers()
             .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNameCaseInsensitive = false; });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -48,6 +51,8 @@ public class Startup
 
     public static void Configuration(WebApplication app)
     {
+        app.UseApplySeedFromAssembly(typeof(Startup).Assembly);
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
