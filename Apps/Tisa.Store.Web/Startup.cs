@@ -1,5 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Net;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Json;
@@ -9,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tisa.Store.Web.Data.Contexts;
 using Tisa.Store.Web.Infrastructures.Extensions;
+using Tisa.Store.Web.Infrastructures.Routes;
 
 namespace Tisa.Store.Web;
 
@@ -42,11 +46,17 @@ public class Startup
 
         services.AddAutoMapper(typeof(Startup).Assembly);
 
-        services.AddControllers()
+        services.AddControllers(options => { options.Conventions.Add(new NamespaceToken()); })
             .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNameCaseInsensitive = false; });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options =>
+        {
+            options.CustomSchemaIds(type => type.GetCustomAttributes()
+                .Where(attribute => attribute.GetType() == typeof(DisplayNameAttribute))
+                .Select(attribute => ((DisplayNameAttribute)attribute).DisplayName)
+                .FirstOrDefault());
+        });
     }
 
     public static void Configuration(WebApplication app)
