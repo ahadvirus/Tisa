@@ -1,39 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tisa.Store.Web.Data.Contexts;
-using Tisa.Store.Web.Models.ViewModels.Attributes;
 
-namespace Tisa.Store.Web.Controllers;
+namespace Tisa.Store.Web.Controllers.Attribute;
+
 
 [ApiController]
-[Route("[controller]")]
-public class AttributeController : ControllerBase
+[Route(
+    template: "[namespace]",
+    Name = "[namespace]"
+)]
+public class CreateController : ControllerBase
 {
     private ApplicationContext Context { get; }
     private IMapper Mapper { get; }
 
-    public AttributeController(ApplicationContext context, IMapper mapper)
+    public CreateController(ApplicationContext context, IMapper mapper)
     {
         Context = context;
         Mapper = mapper;
     }
-
-    [HttpGet]
-    public async Task<IEnumerable<IndexVM>> Index(CancellationToken cancellation)
-    {
-        return await Context.Attributes.Include(attribute => attribute.Type)
-            .ProjectTo<IndexVM>(Mapper.ConfigurationProvider)
-            .ToListAsync(cancellation);
-    }
-
+    
+    // GET
     [HttpPost]
-    public async Task<ActionResult<IndexVM>> Create(CreateVM entry, CancellationToken cancellation)
+    public async Task<ActionResult<Models.ViewModels.Attributes.IndexVM>> Invoke(
+        [FromBody]Models.ViewModels.Attributes.CreateVM entry,
+        CancellationToken cancellation
+        )
     {
         Models.Entities.Type? type = await Context.Types.Where(type => type.Kind == entry.Type)
             .FirstOrDefaultAsync(cancellation);
@@ -41,9 +38,9 @@ public class AttributeController : ControllerBase
         if (type == null)
         {
             ModelState.AddModelError(
-                nameof(CreateVM.Type),  
-                string.Format("Please send valid `{0}`", nameof(CreateVM.Type))
-                );
+                nameof(Models.ViewModels.Attributes.CreateVM.Type),  
+                string.Format("Please send valid `{0}`", nameof(Models.ViewModels.Attributes.CreateVM.Type))
+            );
 
             return BadRequest(ModelState);
         }
@@ -58,7 +55,7 @@ public class AttributeController : ControllerBase
 
         attribute.Type = type;
         
-        return Ok(Mapper.Map<IndexVM>(attribute));
+        return Ok(Mapper.Map<Models.ViewModels.Attributes.IndexVM>(attribute));
 
     }
 }

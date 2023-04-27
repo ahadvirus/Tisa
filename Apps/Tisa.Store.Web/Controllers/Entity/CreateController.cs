@@ -12,7 +12,10 @@ using Tisa.Store.Web.Models.ViewModels.Entities;
 namespace Tisa.Store.Web.Controllers.Entity;
 
 [ApiController]
-[Route(template: "[namespace]", Name = "[namespace]")]
+[Route(
+    template: "[namespace]",
+    Name = "[namespace]"
+)]
 public class CreateController : ControllerBase
 {
     
@@ -28,7 +31,7 @@ public class CreateController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<IndexVM>> Invoke(CreateVM entry, CancellationToken cancellationToken)
     {
-        IDictionary<string, Attribute?> attributes = new Dictionary<string, Attribute?>();
+        IDictionary<string, Models.Entities.Attribute?> attributes = new Dictionary<string, Models.Entities.Attribute?>();
 
         foreach (string name in entry.Attributes)
         {
@@ -36,11 +39,12 @@ public class CreateController : ControllerBase
                 name,
                 await Context.Attributes
                     .Where(attribute => attribute.Name == name)
+                    .Include(attribute => attribute.Type)
                     .FirstOrDefaultAsync(cancellationToken)
             );
         }
 
-        if (attributes.Select(pair => pair.Value == null).Any())
+        if (attributes.Any(pair => pair.Value == null))
         {
             foreach (string error in attributes.Where(pair => pair.Value == null).Select(pair => string.Format(
                              "Please send valid `Attribute`, we couldn't find `{0}` attribute", pair.Key
@@ -56,11 +60,27 @@ public class CreateController : ControllerBase
             return BadRequest(ModelState);
         }
 
+        if (await Context.Entities
+                .Where(entity => entity.Name == entry.Name)
+                .Select(entity => entity.Id)
+                .AnyAsync(cancellationToken))
+        {
+            ModelState.AddModelError(
+                key: nameof(CreateVM.Name),
+                errorMessage: string.Format(
+                    "The `{0}` entity already exist",
+                    entry.Name
+                    )
+            );
+            
+            return BadRequest(ModelState);
+        }
+
         Models.Entities.Entity entity = Mapper.Map<Models.Entities.Entity>(entry);
 
         entity.Attributes = new List<AttributeEntity>();
 
-        foreach (Attribute? attribute in attributes.Values)
+        foreach (Models.Entities.Attribute? attribute in attributes.Values)
         {
             if (attribute != null)
             {

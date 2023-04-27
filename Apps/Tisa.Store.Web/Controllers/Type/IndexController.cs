@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using Tisa.Store.Web.Data.Contexts;
 using Tisa.Store.Web.Models.ViewModels.Types;
 
-namespace Tisa.Store.Web.Controllers;
+namespace Tisa.Store.Web.Controllers.Type;
 
 [ApiController]
-[Route("[controller]")]
-public class TypeController : ControllerBase
+[Route(
+    template: "[namespace]",
+    Name = "[namespace]"
+)]
+public class IndexController : ControllerBase
 {
     private ApplicationContext Context { get; }
     private IMapper Mapper { get; }
 
-    public TypeController(ApplicationContext context, IMapper mapper)
+    public IndexController(ApplicationContext context, IMapper mapper)
     {
         Context = context;
         Mapper = mapper;
@@ -25,7 +28,7 @@ public class TypeController : ControllerBase
 
     // GET
     [HttpGet]
-    public async Task<IEnumerable<IndexVM>> Index(CancellationToken cancellationToken)
+    public async Task<IEnumerable<IndexVM>> Invoke(CancellationToken cancellationToken)
     {
         return await Context.Types
             .ProjectTo<IndexVM>(Mapper.ConfigurationProvider)
