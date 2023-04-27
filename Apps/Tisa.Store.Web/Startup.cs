@@ -10,6 +10,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tisa.Store.Web.Controllers;
 using Tisa.Store.Web.Data.Contexts;
 using Tisa.Store.Web.Infrastructures.Extensions;
 using Tisa.Store.Web.Infrastructures.Routes;
@@ -46,7 +47,18 @@ public class Startup
 
         services.AddAutoMapper(typeof(Startup).Assembly);
 
-        services.AddControllers(options => { options.Conventions.Add(new NamespaceToken()); })
+        services.AddControllers(options =>
+            {
+                Type homeController = typeof(HomeController);
+                
+                string namespaceTokenValue =
+                    !string.IsNullOrWhiteSpace(homeController.Namespace)
+                        ? homeController.Namespace
+                        : string.Empty;
+
+                options.Conventions.Insert(0, new NamespaceToken(namespaceTokenValue));
+                options.Conventions.Add(new ControllerNameDocumentationConvention());
+            })
             .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNameCaseInsensitive = false; });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
