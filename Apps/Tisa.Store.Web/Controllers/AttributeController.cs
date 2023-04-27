@@ -35,11 +35,10 @@ public class AttributeController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<IndexVM>> Create(CreateVM entry, CancellationToken cancellation)
     {
-        int typeId = await Context.Types.Where(type => type.Kind == entry.Type)
-            .Select(type => type.Id)
+        Models.Entities.Type? type = await Context.Types.Where(type => type.Kind == entry.Type)
             .FirstOrDefaultAsync(cancellation);
 
-        if (typeId == 0)
+        if (type == null)
         {
             ModelState.AddModelError(
                 nameof(CreateVM.Type),  
@@ -50,13 +49,15 @@ public class AttributeController : ControllerBase
         }
 
         Models.Entities.Attribute attribute = Mapper.Map<Models.Entities.Attribute>(entry);
-
-        attribute.TypeId = typeId;
+        
+        attribute.TypeId = type.Id;
 
         await Context.Attributes.AddAsync(attribute, cancellation);
 
         await Context.SaveChangesAsync(cancellation);
 
+        attribute.Type = type;
+        
         return Ok(Mapper.Map<IndexVM>(attribute));
 
     }
