@@ -21,7 +21,7 @@ public class IndexProfile : Profile
             .ForMember(
                 des => des.Attributes,
                 opt => opt.MapFrom(
-                    src => src.Attributes.Select(attribute => attribute.Attribute)
+                    src => src.Attributes
                 )
             )
             ;
