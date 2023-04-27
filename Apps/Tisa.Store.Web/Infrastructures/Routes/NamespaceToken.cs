@@ -8,12 +8,15 @@ namespace Tisa.Store.Web.Infrastructures.Routes;
 
 public class NamespaceToken : IApplicationModelConvention
 {
-    private readonly string _tokenRegex;
+    private string TokenRegex { get; }
+    private string TokenName { get; }
+    private string TokenValue { get; }
 
-    public NamespaceToken()
+    public NamespaceToken(string tokenValue)
     {
-        string tokenName = nameof(System.Type.Namespace).ToLower();
-        _tokenRegex = $@"(\[{tokenName}])(?<!\[\1(?=]))";
+        TokenValue = tokenValue;
+        TokenName = nameof(System.Type.Namespace).ToLower();
+        TokenRegex = $@"(\[{TokenName}])(?<!\[\1(?=]))";
     }
 
     public void Apply(ApplicationModel application)
@@ -24,6 +27,14 @@ public class NamespaceToken : IApplicationModelConvention
                 .Where(attribute => attribute.GetType() == typeof(NamespaceAttribute))
                 .Select(attribute => ((NamespaceAttribute)attribute).Default)
                 .FirstOrDefault();
+
+            @default = string.IsNullOrWhiteSpace(@default)
+                ? (
+                    string.IsNullOrWhiteSpace(TokenValue)
+                        ? string.Empty
+                        : TokenValue
+                )
+                : @default;
             
             string @namespace = !string.IsNullOrWhiteSpace(@default)
                 ? (
@@ -32,39 +43,44 @@ public class NamespaceToken : IApplicationModelConvention
                         : string.Empty
                 )
                 : string.Empty;
-            
+
             if (!string.IsNullOrWhiteSpace(@namespace) && !string.IsNullOrWhiteSpace(@default))
             {
                 @namespace = @namespace
-                    .Replace(@default, string.Empty)
-                    .Replace('.', '/');
+                        .Replace(@default, string.Empty);
                 
-                @namespace = @namespace[0] == '/' ? 
-                    @namespace.Substring(1) : 
-                    @namespace;
+                if (!string.IsNullOrWhiteSpace(@namespace))
+                {
+                    @namespace = @namespace[0] == '.' ? @namespace.Substring(1) : @namespace;
 
-                @namespace = @namespace[(@namespace.Length - 1)] == '/'
-                    ? @namespace.Substring(0, (@namespace.Length - 1))
-                    : @namespace;
+                    @namespace = @namespace[(@namespace.Length - 1)] == '.'
+                        ? @namespace.Substring(0, (@namespace.Length - 1))
+                        : @namespace;
+                }
             }
-            
-            string tokenValue = @namespace;
-            UpdateSelectors(controller.Selectors, tokenValue);
-            UpdateSelectors(controller.Actions.SelectMany(a => a.Selectors), tokenValue);
+
+            UpdateSelectors(controller.Selectors, @namespace);
+            UpdateSelectors(controller.Actions.SelectMany(a => a.Selectors), @namespace);
         }
     }
 
     private void UpdateSelectors(IEnumerable<SelectorModel> selectors, string? tokenValue)
     {
-        foreach (var selector in selectors.Where(s => s.AttributeRouteModel != null))
+        foreach (SelectorModel selector in selectors.Where(selector => selector.AttributeRouteModel != null))
         {
             if (selector.AttributeRouteModel != null)
             {
-                selector.AttributeRouteModel.Template =
-                    InsertTokenValue(selector.AttributeRouteModel.Template, tokenValue);
-                
-                selector.AttributeRouteModel.Name = 
-                    InsertTokenValue(selector.AttributeRouteModel.Name, tokenValue);
+                AttributeRouteModel? @new = AttributeRouteModel.CombineAttributeRouteModel(selector.AttributeRouteModel, new AttributeRouteModel());
+                if (@new != null)
+                {
+                    @new.Template =
+                        InsertTokenValue(@new.Template, ParseToRouteUrl(tokenValue));
+                    @new.Name = 
+                        InsertTokenValue(@new.Name, tokenValue);
+
+                }
+
+                selector.AttributeRouteModel = @new;
             }
         }
     }
@@ -78,8 +94,26 @@ public class NamespaceToken : IApplicationModelConvention
         
         return Regex.Replace(
             template, 
-            _tokenRegex, 
+            TokenRegex, 
             string.IsNullOrWhiteSpace(tokenValue) ? string.Empty : tokenValue
             );
+    }
+
+    private string? ParseToRouteUrl(string? entry)
+    {
+        if (!string.IsNullOrWhiteSpace(entry))
+        {
+            entry = entry.Replace('.', '/');
+                
+            entry = entry[0] == '/' ? 
+                entry.Substring(1) : 
+                entry;
+
+            entry = entry[(entry.Length - 1)] == '/'
+                ? entry.Substring(0, (entry.Length - 1))
+                : entry;
+        }
+
+        return entry;
     }
 }
