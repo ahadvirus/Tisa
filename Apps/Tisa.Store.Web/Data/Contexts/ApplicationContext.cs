@@ -12,6 +12,8 @@ public class ApplicationContext : DbContext
 
     public DbSet<Type> Types { get; set; }
     public DbSet<Attribute> Attributes { get; set; }
+    public DbSet<AttributeEntity> AttributeProducts { get; set; }
+    public DbSet<Entity> Entities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

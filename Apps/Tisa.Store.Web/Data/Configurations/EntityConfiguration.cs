@@ -4,9 +4,9 @@ using Tisa.Store.Web.Models.Entities;
 
 namespace Tisa.Store.Web.Data.Configurations
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public class EntityConfiguration : IEntityTypeConfiguration<Entity>
     {
-        public void Configure(EntityTypeBuilder<Product> builder)
+        public void Configure(EntityTypeBuilder<Entity> builder)
         {
             builder.HasKey(product => product.Id);
 
@@ -17,8 +17,8 @@ namespace Tisa.Store.Web.Data.Configurations
                 .IsUnique();
 
             builder.HasMany(product => product.Attributes)
-                .WithOne(attribute => attribute.Product)
-                .HasForeignKey(attribute => attribute.ProductId);
+                .WithOne(attribute => attribute.Entity)
+                .HasForeignKey(attribute => attribute.EntityId);
         }
     }
 }
