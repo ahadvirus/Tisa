@@ -6,14 +6,12 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tisa.Store.Web.Data.Contexts;
-using Tisa.Store.Web.Infrastructures.Attributes;
 using Tisa.Store.Web.Models.ViewModels.Entities;
 
 namespace Tisa.Store.Web.Controllers.Entity;
 
 [ApiController]
-[Namespace("Tisa.Store.Web.Controllers")]
-[Route("[namespace]")]
+[Route(template: "[namespace]", Name = "[namespace]")]
 public class IndexController : ControllerBase
 {
     private ApplicationContext Context { get; }
