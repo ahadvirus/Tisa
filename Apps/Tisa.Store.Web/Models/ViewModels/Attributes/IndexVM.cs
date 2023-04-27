@@ -1,5 +1,9 @@
-﻿namespace Tisa.Store.Web.Models.ViewModels.Attributes;
+﻿using System.ComponentModel;
+using Tisa.Store.Web.Models.Entities;
 
+namespace Tisa.Store.Web.Models.ViewModels.Attributes;
+
+[DisplayName(nameof(Attribute) + nameof(Entities.IndexVM))]
 public class IndexVM
 {
     public IndexVM()
