@@ -7,12 +7,11 @@ public class ApplicationContext : DbContext
 {
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
-        
     }
 
     public DbSet<Type> Types { get; set; }
     public DbSet<Attribute> Attributes { get; set; }
-    public DbSet<AttributeEntity> AttributeProducts { get; set; }
+    public DbSet<AttributeEntity> AttributeEntities { get; set; }
     public DbSet<Entity> Entities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
