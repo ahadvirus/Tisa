@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace Tisa.Store.Web.Infrastructures.Routes;
+namespace Tisa.Store.Web.Infrastructures.Routes.Conventions;
 
 public class ControllerNameDocumentationConvention : IControllerModelConvention
 {

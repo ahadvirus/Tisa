@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Tisa.Store.Web.Data.Contexts;
 
-namespace Tisa.Store.Web.Infrastructures.Routes;
+namespace Tisa.Store.Web.Infrastructures.Routes.Constraints;
 
 public class EntityConstraint : IRouteConstraint
 {

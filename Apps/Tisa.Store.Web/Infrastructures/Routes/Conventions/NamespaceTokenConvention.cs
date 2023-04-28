@@ -4,15 +4,15 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Tisa.Store.Web.Infrastructures.Attributes;
 
-namespace Tisa.Store.Web.Infrastructures.Routes;
+namespace Tisa.Store.Web.Infrastructures.Routes.Conventions;
 
-public class NamespaceToken : IApplicationModelConvention
+public class NamespaceTokenConvention : IApplicationModelConvention
 {
     private string TokenRegex { get; }
     private string TokenName { get; }
     private string TokenValue { get; }
 
-    public NamespaceToken(string tokenValue)
+    public NamespaceTokenConvention(string tokenValue)
     {
         TokenValue = tokenValue;
         TokenName = nameof(System.Type.Namespace).ToLower();
