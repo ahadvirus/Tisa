@@ -11,7 +11,10 @@ using Tisa.Store.Web.Models.ViewModels.Entities;
 namespace Tisa.Store.Web.Controllers.Entity;
 
 [ApiController]
-[Route(template: "[namespace]", Name = "[namespace]")]
+[Route(
+    template: "[namespace]",
+    Name = "[namespace].[controller]"
+)]
 public class IndexController : ControllerBase
 {
     private ApplicationContext Context { get; }

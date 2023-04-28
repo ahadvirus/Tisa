@@ -14,7 +14,7 @@ namespace Tisa.Store.Web.Controllers.Entity;
 [ApiController]
 [Route(
     template: "[namespace]",
-    Name = "[namespace]"
+    Name = "[namespace].[controller]"
 )]
 public class CreateController : ControllerBase
 {

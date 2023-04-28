@@ -10,8 +10,11 @@ namespace Tisa.Store.Web.Controllers.Entity.Attribute;
 
 [ApiController]
 [Route(
-    template: nameof(Models.Entities.Entity) + "/{name:entity}/" + nameof(Models.Entities.Attribute),
-    Name = "[namespace]"
+    template: (nameof(Models.Entities.Entity) + "/{" + 
+               nameof(Models.ViewModels.Entities.Attributes.IndexVM.Name) + ":" + 
+               nameof(Models.Entities.Entity) + "}/" + 
+               nameof(Models.Entities.Attribute)),
+    Name = "[namespace].[controller]"
 )]
 public class CreateController : ControllerBase
 {
@@ -34,6 +37,7 @@ public class CreateController : ControllerBase
         Models.Entities.Attribute? attribute = await Context.Attributes
             .Where(attribute => attribute.Name == entry.Title)
             .Include(attribute => attribute.Entites.Where(attributeEntity => attributeEntity.EntityId == entity.Id))
+            .Include(attribute => attribute.Type)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (attribute == null)
@@ -60,7 +64,7 @@ public class CreateController : ControllerBase
                 )
             );
 
-            return BadRequest();
+            return BadRequest(ModelState);
         }
 
         Models.Entities.AttributeEntity attributeEntity = new Models.Entities.AttributeEntity()
