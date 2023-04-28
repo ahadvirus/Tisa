@@ -2,7 +2,7 @@
 
 namespace Tisa.Store.Web.Models.ViewModels.Entities.Attributes;
 
-public class CreateVM : IndexVM
+public class CreateVM
 {
     [FromBody]
     public string Title { get; set; }
