@@ -12,4 +12,5 @@ public class Type
     public int Id { get; set; }
     public string Kind { get; set; }
     public virtual ICollection<Attribute> Attributes { get; set; }
+    public virtual ICollection<TypeValidator> Validators { get; set; }
 }

@@ -13,6 +13,8 @@ public class ApplicationContext : DbContext
     public DbSet<Attribute> Attributes { get; set; }
     public DbSet<AttributeEntity> AttributeEntities { get; set; }
     public DbSet<Entity> Entities { get; set; }
+    public DbSet<TypeValidator> TypeValidators { get; set; }
+    public DbSet<Validator> Validators { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

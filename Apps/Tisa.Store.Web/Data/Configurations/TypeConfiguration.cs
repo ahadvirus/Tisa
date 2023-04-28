@@ -19,5 +19,9 @@ public class TypeConfiguration : IEntityTypeConfiguration<Type>
         builder.HasMany(type => type.Attributes)
             .WithOne(attribute => attribute.Type)
             .HasForeignKey(attribute => attribute.TypeId);
+        
+        builder.HasMany(type => type.Validators)
+            .WithOne(validator => validator.Type)
+            .HasForeignKey(validator => validator.TypeId);
     }
 }
