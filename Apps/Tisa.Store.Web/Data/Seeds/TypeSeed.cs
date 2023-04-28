@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Tisa.Store.Web.Data.Contexts;
 using Tisa.Store.Web.Infrastructures.Contracts;
 using Tisa.Store.Web.Infrastructures.Attributes;
@@ -42,7 +43,10 @@ public class TypeSeed : ISeed<ApplicationContext>
 
     public async Task Invoke(ApplicationContext context)
     {
-        await context.Types.AddRangeAsync(await Get());
-        await context.SaveChangesAsync();
+        if (!await context.Types.AnyAsync())
+        {
+            await context.Types.AddRangeAsync(await Get());
+            await context.SaveChangesAsync();
+        }
     }
 }

@@ -14,22 +14,25 @@ public class AttributeSeed : ISeed<ApplicationContext>
 
     public async Task Invoke(ApplicationContext context)
     {
-        int typeId = await context.Types
-            .Where(type => type.Kind == nameof(Int32))
-            .Select(type => type.Id)
-            .FirstOrDefaultAsync();
-
-        if (typeId != 0)
+        if (!await context.Attributes.AnyAsync())
         {
+            int typeId = await context.Types
+                .Where(type => type.Kind == nameof(Int32))
+                .Select(type => type.Id)
+                .FirstOrDefaultAsync();
 
-            await context.Attributes.AddAsync(new Models.Entities.Attribute()
+            if (typeId != 0)
             {
-                Name = nameof(Models.Entities.Attribute.Id),
-                Title = nameof(Models.Entities.Attribute.Id),
-                TypeId = typeId
-            });
 
-            await context.SaveChangesAsync();
+                await context.Attributes.AddAsync(new Models.Entities.Attribute()
+                {
+                    Name = nameof(Models.Entities.Attribute.Id),
+                    Title = nameof(Models.Entities.Attribute.Id),
+                    TypeId = typeId
+                });
+
+                await context.SaveChangesAsync();
+            }
         }
 
     }
