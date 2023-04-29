@@ -13,7 +13,7 @@ namespace Tisa.Store.Web.Controllers.Entity.Attribute;
 [ApiController]
 [Route(
     template: (nameof(Models.Entities.Entity) + "/{" +
-               nameof(Models.ViewModels.Entities.Attributes.IndexVM.Name) + ":" +
+               nameof(Models.ViewModels.Entities.Attributes.IndexVM.Entity) + ":" +
                nameof(Models.Entities.Entity) + "}/" +
                nameof(Models.Entities.Attribute)),
     Name = "[namespace].[controller]"
@@ -36,7 +36,7 @@ public class IndexController : ControllerBase
     )
     {
         return await Context.Entities
-            .Where(entity => entity.Name == entry.Name)
+            .Where(entity => entity.Name == entry.Entity)
             .SelectMany(entity => entity.Attributes)
             .Include(attribute => attribute.Attribute)
             .ThenInclude(attribute => attribute.Type)

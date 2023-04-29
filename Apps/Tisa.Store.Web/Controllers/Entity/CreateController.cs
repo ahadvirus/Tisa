@@ -70,7 +70,7 @@ public class CreateController : ControllerBase
                 errorMessage: string.Format(
                     "The `{0}` entity already exist",
                     entry.Name
-                    )
+                )
             );
             
             return BadRequest(ModelState);

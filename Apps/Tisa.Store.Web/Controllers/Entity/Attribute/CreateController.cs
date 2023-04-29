@@ -11,7 +11,7 @@ namespace Tisa.Store.Web.Controllers.Entity.Attribute;
 [ApiController]
 [Route(
     template: (nameof(Models.Entities.Entity) + "/{" + 
-               nameof(Models.ViewModels.Entities.Attributes.IndexVM.Name) + ":" + 
+               nameof(Models.ViewModels.Entities.Attributes.IndexVM.Entity) + ":" + 
                nameof(Models.Entities.Entity) + "}/" + 
                nameof(Models.Entities.Attribute)),
     Name = "[namespace].[controller]"
@@ -35,8 +35,8 @@ public class CreateController : ControllerBase
     )
     {
         Models.Entities.Attribute? attribute = await Context.Attributes
-            .Where(attribute => attribute.Name == entry.Title)
-            .Include(attribute => attribute.Entites.Where(attributeEntity => attributeEntity.EntityId == entity.Id))
+            .Where(attribute => attribute.Name == entry.Name)
+            .Include(attribute => attribute.Entites.Where(attributeEntity => attributeEntity.EntityId == entity.EntityId))
             .Include(attribute => attribute.Type)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -46,7 +46,7 @@ public class CreateController : ControllerBase
                 nameof(Models.Entities.Attribute),
                 string.Format(
                     "Please send valid `Attribute`, we couldn't find `{0}` attribute",
-                    entry.Title
+                    entry.Name
                 )
             );
 
@@ -59,8 +59,8 @@ public class CreateController : ControllerBase
                 nameof(Models.Entities.Attribute),
                 string.Format(
                     "The `{0}` attribute already bounded to `{1}`",
-                    entry.Title,
-                    entity.Name
+                    entry.Name,
+                    entity.Entity
                 )
             );
 
@@ -71,7 +71,7 @@ public class CreateController : ControllerBase
         {
             Attribute = attribute,
             AttributeId = attribute.Id,
-            EntityId = entity.Id
+            EntityId = entity.EntityId
         };
 
         await Context.AttributeEntities.AddAsync(attributeEntity, cancellationToken);

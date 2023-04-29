@@ -8,7 +8,6 @@ using Tisa.Store.Web.Data.Contexts;
 
 namespace Tisa.Store.Web.Controllers.Attribute;
 
-
 [ApiController]
 [Route(
     template: "[namespace]",
@@ -30,9 +29,9 @@ public class CreateController : ControllerBase
     public async Task<ActionResult<Models.ViewModels.Attributes.IndexVM>> Invoke(
         [FromBody]Models.ViewModels.Attributes.CreateVM entry,
         CancellationToken cancellation
-        )
+    )
     {
-        Models.Entities.Type? type = await Context.Types.Where(type => type.Kind == entry.Type)
+        Models.Entities.Type? type = await Context.Types.Where(type => type.Name == entry.Type)
             .FirstOrDefaultAsync(cancellation);
 
         if (type == null)
