@@ -10,10 +10,10 @@ public class TypeConfiguration : IEntityTypeConfiguration<Type>
     {
         builder.HasKey(type => type.Id);
 
-        builder.Property(type => type.Kind)
+        builder.Property(type => type.Name)
             .IsRequired();
 
-        builder.HasIndex(type => type.Kind)
+        builder.HasIndex(type => type.Name)
             .IsUnique();
 
         builder.HasMany(type => type.Attributes)

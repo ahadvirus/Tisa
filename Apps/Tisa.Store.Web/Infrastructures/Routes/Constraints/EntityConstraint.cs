@@ -34,7 +34,7 @@ public class EntityConstraint : IRouteConstraint
                             httpContext.Request.Headers.Add(
                                 string.Format("{0}{1}", nameof(Models.Entities.Entity), nameof(Models.Entities.Entity.Id)),
                                 entityId.ToString()
-                                );
+                            );
                             return true;
                         }
                     }

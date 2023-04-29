@@ -13,7 +13,7 @@ public class AttributeConfiguration : IEntityTypeConfiguration<Attribute>
         builder.Property(attribute => attribute.Name)
             .IsRequired();
 
-        builder.Property(attribute => attribute.Title)
+        builder.Property(attribute => attribute.Discription)
             .IsRequired();
 
         builder.HasMany(attribute => attribute.Entites)

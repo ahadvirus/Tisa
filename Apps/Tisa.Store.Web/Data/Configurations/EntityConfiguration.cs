@@ -2,23 +2,22 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tisa.Store.Web.Models.Entities;
 
-namespace Tisa.Store.Web.Data.Configurations
+namespace Tisa.Store.Web.Data.Configurations;
+
+public class EntityConfiguration : IEntityTypeConfiguration<Entity>
 {
-    public class EntityConfiguration : IEntityTypeConfiguration<Entity>
+    public void Configure(EntityTypeBuilder<Entity> builder)
     {
-        public void Configure(EntityTypeBuilder<Entity> builder)
-        {
-            builder.HasKey(product => product.Id);
+        builder.HasKey(product => product.Id);
 
-            builder.Property(product => product.Name)
-                .IsRequired();
+        builder.Property(product => product.Name)
+            .IsRequired();
 
-            builder.HasIndex(product => product.Name)
-                .IsUnique();
+        builder.HasIndex(product => product.Name)
+            .IsUnique();
 
-            builder.HasMany(product => product.Attributes)
-                .WithOne(attribute => attribute.Entity)
-                .HasForeignKey(attribute => attribute.EntityId);
-        }
+        builder.HasMany(product => product.Attributes)
+            .WithOne(attribute => attribute.Entity)
+            .HasForeignKey(attribute => attribute.EntityId);
     }
 }
