@@ -3,21 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Tisa.Store.Web.Models.ViewModels.Entities.Attributes;
 
-public class DeleteVM
+public class DeleteVM : IndexVM
 {
     public DeleteVM()
     {
         Entity = string.Empty;
         Attribute = string.Empty;
     }
-    
-    [FromRoute]
-    [JsonIgnore]
-    public string Entity { get; set; }
-    
-    [FromHeader]
-    [JsonIgnore]
-    public int EntityId { get; set; }
 
     [FromRoute]
     [JsonIgnore]
