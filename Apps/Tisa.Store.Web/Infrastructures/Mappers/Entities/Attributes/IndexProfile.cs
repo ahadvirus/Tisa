@@ -15,13 +15,13 @@ public class IndexProfile : Profile
                 opt => opt.MapFrom(
                     src => src.Attribute.Name
                 ))
-            .ForMember(des => des.Display,
+            .ForMember(des => des.Description,
                 opt => opt.MapFrom(
-                    src => src.Attribute.Title
+                    src => src.Attribute.Discription
                 ))
             .ForMember(des => des.Type,
                 opt => opt.MapFrom(
-                    src => src.Attribute.Type.Kind
+                    src => src.Attribute.Type.Name
                 ));
     }
     

@@ -4,6 +4,11 @@ namespace Tisa.Store.Web.Models.ViewModels.Entities.Attributes;
 
 public class CreateVM
 {
+    public CreateVM()
+    {
+        Name = string.Empty;
+    }
+    
     [FromBody]
-    public string Title { get; set; }
+    public string Name { get; set; }
 }

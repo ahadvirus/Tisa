@@ -11,9 +11,9 @@ public class CreateProfile : Profile
                 opt => opt.MapFrom(
                     src => src.Title
                 ))
-            .ForMember(des => des.Title,
+            .ForMember(des => des.Discription,
                 opt => opt.MapFrom(
-                    src => src.Display
+                    src => src.Description
                 ))
             .ForMember(des => des.Type,
                 opt => opt.Ignore());

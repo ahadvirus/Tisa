@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Tisa.Store.Web.Models.Entities;
 using Tisa.Store.Web.Models.ViewModels.Entities;
 

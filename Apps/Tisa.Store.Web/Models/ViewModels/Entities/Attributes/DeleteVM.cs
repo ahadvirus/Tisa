@@ -5,6 +5,12 @@ namespace Tisa.Store.Web.Models.ViewModels.Entities.Attributes;
 
 public class DeleteVM
 {
+    public DeleteVM()
+    {
+        Entity = string.Empty;
+        Attribute = string.Empty;
+    }
+    
     [FromRoute]
     [JsonIgnore]
     public string Entity { get; set; }

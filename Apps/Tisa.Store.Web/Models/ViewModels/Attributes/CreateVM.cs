@@ -10,14 +10,14 @@ public class CreateVM
     public CreateVM()
     {
         Title = string.Empty;
-        Display = string.Empty;
+        Description = string.Empty;
         Type = string.Empty;
     }
 
     [Required]
     public string Title { get; set; }
     [Required]
-    public string Display { get; set; }
+    public string Description { get; set; }
     [Required]
     public string Type { get; set; }
 }

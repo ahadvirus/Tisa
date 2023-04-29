@@ -8,6 +8,12 @@ namespace Tisa.Store.Web.Models.ViewModels.Entities;
 [DisplayName(nameof(Entity) + nameof(CreateVM))]
 public class CreateVM
 {
+    public CreateVM()
+    {
+        Name = string.Empty;
+        
+        Attributes = new List<string>();
+    }
     [Required]
     public string Name { get; set; }
     [Required]
