@@ -38,7 +38,7 @@ public class NamespaceTokenConvention : IApplicationModelConvention
             
             string @namespace = !string.IsNullOrWhiteSpace(@default)
                 ? (
-                        !string.IsNullOrWhiteSpace(controller.ControllerType.Namespace)
+                    !string.IsNullOrWhiteSpace(controller.ControllerType.Namespace)
                         ? controller.ControllerType.Namespace
                         : string.Empty
                 )
@@ -47,7 +47,7 @@ public class NamespaceTokenConvention : IApplicationModelConvention
             if (!string.IsNullOrWhiteSpace(@namespace) && !string.IsNullOrWhiteSpace(@default))
             {
                 @namespace = @namespace
-                        .Replace(@default, string.Empty);
+                    .Replace(@default, string.Empty);
                 
                 if (!string.IsNullOrWhiteSpace(@namespace))
                 {
@@ -96,7 +96,7 @@ public class NamespaceTokenConvention : IApplicationModelConvention
             template, 
             TokenRegex, 
             string.IsNullOrWhiteSpace(tokenValue) ? string.Empty : tokenValue
-            );
+        );
     }
 
     private string? ParseToRouteUrl(string? entry)
