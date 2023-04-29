@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tisa.Store.Web.Data.Contexts;
-using Tisa.Store.Web.Infrastructures.Contracts;
 using Tisa.Store.Web.Infrastructures.Attributes;
+using Tisa.Store.Web.Infrastructures.Contracts.Database;
 
 namespace Tisa.Store.Web.Data.Seeds;
 
@@ -17,7 +17,7 @@ public class AttributeSeed : ISeed<ApplicationContext>
         if (!await context.Attributes.AnyAsync())
         {
             int typeId = await context.Types
-                .Where(type => type.Kind == nameof(Int32))
+                .Where(type => type.Name == nameof(Int32))
                 .Select(type => type.Id)
                 .FirstOrDefaultAsync();
 
@@ -27,7 +27,7 @@ public class AttributeSeed : ISeed<ApplicationContext>
                 await context.Attributes.AddAsync(new Models.Entities.Attribute()
                 {
                     Name = nameof(Models.Entities.Attribute.Id),
-                    Title = nameof(Models.Entities.Attribute.Id),
+                    Discription = nameof(Models.Entities.Attribute.Id),
                     TypeId = typeId
                 });
 

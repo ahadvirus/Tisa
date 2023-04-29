@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tisa.Store.Web.Infrastructures.Attributes;
-using Tisa.Store.Web.Infrastructures.Contracts;
+using Tisa.Store.Web.Infrastructures.Contracts.Database;
 
 namespace Tisa.Store.Web.Infrastructures.Extensions;
 

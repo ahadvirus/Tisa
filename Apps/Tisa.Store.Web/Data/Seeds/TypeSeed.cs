@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tisa.Store.Web.Data.Contexts;
-using Tisa.Store.Web.Infrastructures.Contracts;
 using Tisa.Store.Web.Infrastructures.Attributes;
+using Tisa.Store.Web.Infrastructures.Contracts.Database;
 
 namespace Tisa.Store.Web.Data.Seeds;
 
@@ -16,27 +16,27 @@ public class TypeSeed : ISeed<ApplicationContext>
         {
             new Models.Entities.Type()
             {
-                Kind = nameof(Int32)
+                Name = nameof(Int32)
             },
             new Models.Entities.Type()
             {
-                Kind = nameof(Single)
+                Name = nameof(Single)
             },
             new Models.Entities.Type()
             {
-                Kind = nameof(Byte)
+                Name = nameof(Byte)
             },
             new Models.Entities.Type()
             {
-                Kind = nameof(Boolean)
+                Name = nameof(Boolean)
             },
             new Models.Entities.Type()
             {
-                Kind = nameof(String)
+                Name = nameof(String)
             },
             new Models.Entities.Type()
             {
-                Kind = nameof(Char)
+                Name = nameof(Char)
             }
         });
     }
