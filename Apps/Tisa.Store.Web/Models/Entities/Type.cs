@@ -6,11 +6,11 @@ public class Type
 {
     public Type()
     {
-        Kind = string.Empty;
+        Name = string.Empty;
     }
     
     public int Id { get; set; }
-    public string Kind { get; set; }
+    public string Name { get; set; }
     public virtual ICollection<Attribute> Attributes { get; set; }
     public virtual ICollection<TypeValidator> Validators { get; set; }
 }
