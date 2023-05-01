@@ -15,12 +15,8 @@ public class Validator
     public string Name { get; set; }
     
     public string Description { get; set; }
-
-    public bool NeedParameters { get; set; }
-
-    public IValidatorParameter ParametersValidator { get; set; }
-    
-    public IValidatorBuilder ValidatorBuilder { get; set; }
     
     public virtual ICollection<TypeValidator> Types { get; set; }
+    
+    public virtual ICollection<ValidatorClaim> Claims { get; set; }
 }

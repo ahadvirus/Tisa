@@ -10,6 +10,11 @@ public class TypeValidatorConfiguration : IEntityTypeConfiguration<TypeValidator
     {
         builder.HasKey(typeValidator => typeValidator.Id);
         
-        builder.HasIndex(typeValidator => new { typeValidator.TypeId, typeValidator.ValidatorId });
+        builder.HasIndex(typeValidator => new { typeValidator.TypeId, typeValidator.ValidatorId })
+            .IsUnique();
+        
+        builder.HasMany(typeValidator => typeValidator.Claims)
+            .WithOne(claim => claim.TypeValidator)
+            .HasForeignKey(claim => claim.TypeValidatorId);
     }
 }

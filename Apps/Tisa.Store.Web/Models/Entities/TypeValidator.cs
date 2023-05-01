@@ -1,4 +1,6 @@
-﻿namespace Tisa.Store.Web.Models.Entities;
+﻿using System.Collections.Generic;
+
+namespace Tisa.Store.Web.Models.Entities;
 
 public class TypeValidator
 {
@@ -11,4 +13,6 @@ public class TypeValidator
     public virtual Validator Validator { get; set; }
     
     public int ValidatorId { get; set; }
+    
+    public virtual ICollection<TypeValidatorClaim> Claims { get; set; }
 }
