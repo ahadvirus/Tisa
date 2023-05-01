@@ -15,6 +15,10 @@ public class ApplicationContext : DbContext
     public DbSet<Entity> Entities { get; set; }
     public DbSet<TypeValidator> TypeValidators { get; set; }
     public DbSet<Validator> Validators { get; set; }
+    
+    public DbSet<TypeValidatorClaim> TypeValidatorClaims { get; set; }
+    
+    public DbSet<ValidatorClaim> ValidatorClaims { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
