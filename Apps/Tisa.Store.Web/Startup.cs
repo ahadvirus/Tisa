@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
@@ -64,7 +63,7 @@ public class Startup
 
         services.AddControllers(options =>
             {
-                Type homeController = typeof(HomeController);
+                System.Type homeController = typeof(HomeController);
 
                 string namespaceTokenValue =
                     !string.IsNullOrWhiteSpace(homeController.Namespace)
@@ -102,6 +101,12 @@ public class Startup
                 nameof(Models.Entities.AttributeEntity)
                     .ToLower(),
                 typeof(AttributeEntityConstraint)
+            );
+            
+            options.ConstraintMap.Add(
+                nameof(Models.Entities.AttributeEntityValidator)
+                    .ToLower(),
+                typeof(AttributeEntityValidatorConstraint)
             );
         });
     }
