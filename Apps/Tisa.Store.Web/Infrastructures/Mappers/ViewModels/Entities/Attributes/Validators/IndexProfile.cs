@@ -9,6 +9,10 @@ public class IndexProfile : Profile
     {
         CreateMap<Models.Entities.AttributeEntityValidator,
                 Models.ViewModels.Entities.Attributes.Validators.IndexVM>()
+            .ForMember(des => des.Id,
+                opt => opt.MapFrom(
+                    src => src.Id
+                ))
             .ForMember(des => des.Name,
                 opt => opt.MapFrom(
                     src => src.Validator.Name
