@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
+using Tisa.Store.Web.Infrastructures.Contracts.Claims.Validators;
 using Tisa.Store.Web.Infrastructures.Contracts.Validator;
 
 namespace Tisa.Store.Web.Models.ViewModels.Validators;
 
-public class CreateVM
+public class CreateVM : IParameter, IBuilder
 {
     public string Name { get; set; }
     
     public string Description { get; set; }
-
-    public bool NeedParameters { get; set; }
 
     public IValidatorParameter ParametersValidator { get; set; }
     

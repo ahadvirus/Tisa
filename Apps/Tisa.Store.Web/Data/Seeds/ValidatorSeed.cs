@@ -26,7 +26,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
             {
                 Name = "NotNull",
                 Description = "Ensures that the specified property is not null.",
-                NeedParameters = false,
                 ParametersValidator = new EmptyParameterValidator(),
                 ValidatorBuilder = new NotNullValidatorBuilder(),
                 Types = new string[]
@@ -44,7 +43,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "NotEmpty",
                 Description =
                     "Ensures that the specified property is not null, an empty string or whitespace (or the default value for value types)",
-                NeedParameters = false,
                 ParametersValidator = new EmptyParameterValidator(),
                 ValidatorBuilder = new NotEmptyValidatorBuilder(),
                 Types = new string[]
@@ -62,7 +60,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "NotEqual",
                 Description =
                     "Ensures that the value of the specified property is not equal to a particular value (or not equal to the value of another property)",
-                NeedParameters = true,
                 ParametersValidator = new SingleParameterValidator(),
                 ValidatorBuilder = new NotEqualValidatorBuilder(),
                 Types = new string[]
@@ -80,7 +77,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "Equal",
                 Description =
                     "Ensures that the value of the specified property is equal to a particular value (or equal to the value of another property)",
-                NeedParameters = true,
                 ParametersValidator = new SingleParameterValidator(),
                 ValidatorBuilder = new EqualValidatorBuilder(),
                 Types = new string[]
@@ -98,7 +94,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "Length",
                 Description =
                     "Ensures that the length of a particular string property is within the specified range. However, it doesn’t ensure that the string property isn’t null.",
-                NeedParameters = true,
                 ParametersValidator = new LengthParameterValidator(),
                 ValidatorBuilder = new LengthValidatorBuilder(),
                 Types = new string[]
@@ -111,7 +106,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "MaximumLength",
                 Description =
                     "Ensures that the length of a particular string property is no longer than the specified value.",
-                NeedParameters = true,
                 ParametersValidator = new StringOperatorParameterValidator(),
                 ValidatorBuilder = new MaximumLengthValidatorBuilder(),
                 Types = new string[]
@@ -124,7 +118,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "MinimumLength",
                 Description =
                     "Ensures that the length of a particular string property is longer than the specified value.",
-                NeedParameters = true,
                 ParametersValidator = new StringOperatorParameterValidator(),
                 ValidatorBuilder = new MinimumLengthValidatorBuilder(),
                 Types = new string[]
@@ -137,7 +130,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "LessThan",
                 Description =
                     "Ensures that the value of the specified property is less than a particular value (or less than the value of another property)",
-                NeedParameters = true,
                 ParametersValidator = new MathematicsParameterValidator(),
                 ValidatorBuilder = new LessThanValidatorBuilder(),
                 Types = new string[]
@@ -151,7 +143,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "LessThanOrEqualTo",
                 Description =
                     "Ensures that the value of the specified property is less than or equal to a particular value (or less than or equal to the value of another property)",
-                NeedParameters = true,
                 ParametersValidator = new MathematicsParameterValidator(),
                 ValidatorBuilder = new LessThanOrEqualToValidatorBuilder(),
                 Types = new string[]
@@ -165,7 +156,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "GreaterThan",
                 Description =
                     "Ensures that the value of the specified property is greater than a particular value (or greater than the value of another property)",
-                NeedParameters = true,
                 ParametersValidator = new MathematicsParameterValidator(),
                 ValidatorBuilder = new GreaterThanValidatorBuilder(),
                 Types = new string[]
@@ -179,7 +169,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "GreaterThanOrEqualTo",
                 Description =
                     "Ensures that the value of the specified property is greater than or equal to a particular value (or greater than or equal to the value of another property)",
-                NeedParameters = true,
                 ParametersValidator = new MathematicsParameterValidator(),
                 ValidatorBuilder = new GreaterThanOrEqualToValidatorBuilder(),
                 Types = new string[]
@@ -193,7 +182,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "Matches",
                 Description =
                     "Ensures that the value of the specified property matches the given regular expression.",
-                NeedParameters = true,
                 ParametersValidator = new SingleParameterValidator(),
                 ValidatorBuilder = new MatchesValidatorBuilder(),
                 Types = new string[]
@@ -206,7 +194,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "Empty",
                 Description =
                     "Ensures that the specified property value is null, or is the default value for the type",
-                NeedParameters = false,
                 ParametersValidator = new EmptyParameterValidator(),
                 ValidatorBuilder = new EmptyValidatorBuilder(),
                 Types = new string[]
@@ -224,7 +211,6 @@ public class ValidatorSeed : ISeed<ApplicationContext>
                 Name = "Null",
                 Description =
                     "Ensures that the specified property value is null",
-                NeedParameters = false,
                 ParametersValidator = new EmptyParameterValidator(),
                 ValidatorBuilder = new NullValidatorBuilder(),
                 Types = new string[]

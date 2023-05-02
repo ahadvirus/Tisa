@@ -32,11 +32,6 @@ public class CreateProfile : Profile
                             Key = nameof(src.ParametersValidator),
                             Value = src.ParametersValidator.GetType().FullName ??
                                     string.Empty
-                        },
-                        new ValidatorClaim()
-                        {
-                            Key = nameof(src.NeedParameters),
-                            Value = src.NeedParameters.ToString()
                         }
                     }
                 ))
