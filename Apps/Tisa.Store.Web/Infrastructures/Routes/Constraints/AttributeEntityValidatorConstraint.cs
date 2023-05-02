@@ -6,9 +6,9 @@ using Tisa.Store.Web.Data.Contexts;
 
 namespace Tisa.Store.Web.Infrastructures.Routes.Constraints;
 
-public class AttributeEntityValidatorConstraint : IRouteConstraint
+public class AttributeEntityValidatorConstraint : EntitiesConstraint
 {
-    public bool Match(HttpContext? httpContext, IRouter? route, string routeKey, RouteValueDictionary values,
+    public override bool Match(HttpContext? httpContext, IRouter? route, string routeKey, RouteValueDictionary values,
         RouteDirection routeDirection)
     {
         bool result = false;
@@ -43,7 +43,8 @@ public class AttributeEntityValidatorConstraint : IRouteConstraint
                                     .FirstOrDefault();
                                 if (validatorId != 0)
                                 {
-                                    httpContext.Request.Headers.Add(
+                                    AppendToHeader(
+                                        httpContext,
                                         nameof(Models.Entities.Validator) + nameof(Models.Entities.Validator.Id),
                                         validatorId.ToString()
                                     );
@@ -56,7 +57,8 @@ public class AttributeEntityValidatorConstraint : IRouteConstraint
                                         .FirstOrDefault();
                                     if (attributeEntityValidatorId != 0)
                                     {
-                                        httpContext.Request.Headers.Add(
+                                        AppendToHeader(
+                                            httpContext,
                                             nameof(Models.Entities.AttributeEntityValidator) + nameof(Models.Entities.AttributeEntityValidator.Id),
                                             attributeEntityValidatorId.ToString()
                                         );

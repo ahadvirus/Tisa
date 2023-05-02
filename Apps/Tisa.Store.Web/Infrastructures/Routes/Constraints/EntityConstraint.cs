@@ -6,10 +6,10 @@ using Tisa.Store.Web.Data.Contexts;
 
 namespace Tisa.Store.Web.Infrastructures.Routes.Constraints;
 
-public class EntityConstraint : IRouteConstraint
+public class EntityConstraint : EntitiesConstraint
 {
     
-    public bool Match(HttpContext? httpContext, IRouter? route, string routeKey, RouteValueDictionary values,
+    public override bool Match(HttpContext? httpContext, IRouter? route, string routeKey, RouteValueDictionary values,
         RouteDirection routeDirection)
     {
         ApplicationContext? context = null;
@@ -31,7 +31,8 @@ public class EntityConstraint : IRouteConstraint
                             .FirstOrDefault();
                         if (entityId != 0)
                         {
-                            httpContext.Request.Headers.Add(
+                            AppendToHeader(
+                                httpContext,
                                 string.Format("{0}{1}", nameof(Models.Entities.Entity), nameof(Models.Entities.Entity.Id)),
                                 entityId.ToString()
                             );
