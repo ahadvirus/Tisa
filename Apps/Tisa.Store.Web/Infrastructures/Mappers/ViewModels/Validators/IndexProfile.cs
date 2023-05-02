@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Tisa.Store.Web.Infrastructures.Mappers.Validators;
+namespace Tisa.Store.Web.Infrastructures.Mappers.ViewModels.Validators;
 
 public class IndexProfile : Profile
 {

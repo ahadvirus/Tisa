@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Tisa.Store.Web.Data.Contexts;
 using Tisa.Store.Web.Infrastructures.Attributes;
 using Tisa.Store.Web.Infrastructures.Contracts.Database;
+using Tisa.Store.Web.Infrastructures.Mappers.ViewModels.Validators;
 using Tisa.Store.Web.Infrastructures.Validators.Builders;
 using Tisa.Store.Web.Infrastructures.Validators.Checkers;
 using Tisa.Store.Web.Models.Entities;
@@ -272,7 +273,7 @@ public class ValidatorSeed : ISeed<ApplicationContext>
             };
 
             IConfigurationProvider configuration = new MapperConfiguration(configure =>
-                configure.AddProfile<Infrastructures.Mappers.Validators.CreateProfile>());
+                configure.AddProfile<CreateProfile>());
 
             IMapper mapper = new Mapper(configuration);
 

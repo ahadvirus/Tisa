@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Tisa.Store.Web.Infrastructures.Mappers.Attributes;
+namespace Tisa.Store.Web.Infrastructures.Mappers.ViewModels.Attributes;
 
 public class CreateProfile : Profile
 {

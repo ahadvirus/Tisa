@@ -2,7 +2,7 @@
 using AutoMapper;
 using Tisa.Store.Web.Models.Entities;
 
-namespace Tisa.Store.Web.Infrastructures.Mappers.Validators;
+namespace Tisa.Store.Web.Infrastructures.Mappers.ViewModels.Validators;
 
 public class CreateProfile : Profile
 {
