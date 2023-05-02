@@ -13,12 +13,7 @@ namespace Tisa.Store.Web.Controllers.Product;
 
 [ApiController]
 [Route(
-    template: nameof(Models.Entities.Product) +
-              "/{" +
-              nameof(Models.ViewModels.Products.RequestVM.Entity) +
-              ":" +
-              nameof(Models.Entities.Entity) +
-              "}",
+    template: "[namespace]",
     Name = "[namespace].[controller]"
 )]
 public class IndexController : ControllerBase
@@ -31,15 +26,10 @@ public class IndexController : ControllerBase
     }
 
     public async Task<ActionResult> Invoke(
-        [FromRoute] Models.ViewModels.Products.RequestVM request,
         CancellationToken cancellationToken
     )
     {
         IEnumerable<Models.DataTransfers.Products.ProductDTO> products = await Context.Products
-            .Where(product => product.EntityId == request.EntityId)
-            .Include(product => product.AttributeEntity)
-            .ThenInclude(attribute => attribute.Attribute)
-            .ThenInclude(attribute => attribute.Type)
             .GroupBy(product => product.Group)
             .Select(group => new Models.DataTransfers.Products.ProductDTO()
             {
@@ -51,109 +41,75 @@ public class IndexController : ControllerBase
                     Type = product.AttributeEntity.Attribute.Type.Name
                 })
             })
-            //.ProjectTo<Models.DataTransfers.Products.ProductDTO>(Mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
+
 
         JsonNodeOptions options = new JsonNodeOptions()
         {
             PropertyNameCaseInsensitive = false
         };
 
-        JsonArray result = new JsonArray(options);
+        JsonObject result = new JsonObject(options);
 
         //List<JsonObject> result = new List<JsonObject>();
 
-        foreach (Models.DataTransfers.Products.ProductDTO product in products)
+        foreach (IGrouping<string, Models.DataTransfers.Products.ProductDTO> product in products.GroupBy(product =>
+                     product.Name))
         {
-            JsonObject item = new JsonObject(options);
-            foreach (Infrastructures.Contracts.DataTransfers.IPropertyDTO property in product.Properties)
+            JsonArray group = new JsonArray(options);
+            foreach (Models.DataTransfers.Products.ProductDTO each in product)
             {
-                System.Type? propertyType = System.Type.GetType(
-                    string.Format(
-                        "{0}.{1}",
-                        nameof(System),
-                        property.Type
-                    )
-                );
-                if (propertyType != null)
+                JsonObject item = new JsonObject(options);
+
+                foreach (Infrastructures.Contracts.DataTransfers.IPropertyDTO property in each.Properties)
                 {
-                    /*
-                    object? value = System.Convert.ChangeType(property.Value, propertyType);
-                    
-                    
-                    MethodInfo? jsonValueCreate = typeof(JsonValue)
-                        .GetMethods()
-                        .Where(method => method.Name == nameof(JsonValue.Create))
-                        .Where(method =>
-                            method.GetParameters().Count() == 2)
-                        .Where(method => method.GetParameters().Any(parameter =>
-                            value == null ? parameter.ParameterType.IsNullableType() : !parameter.ParameterType.IsNullableType()))
-                        .FirstOrDefault(method => method.GetParameters().Any(parameter => value == null ? (
-                            parameter.ParameterType.IsGenericType && parameter.ParameterType.GetGenericArguments()
-                                .Any(generic => generic == propertyType)) : (parameter.ParameterType == propertyType)));
-
-                    MethodInfo? jsonObjectAdd = typeof(JsonObject)
-                        .GetMethods()
-                        .Where(method =>  method.Name == nameof(JsonObject.Add))
-                        .FirstOrDefault(method => method.GetParameters().Count() == 2);
-
-                    if (jsonValueCreate != null && jsonObjectAdd != null)
+                    System.Type? propertyType = System.Type.GetType(
+                        string.Format(
+                            "{0}.{1}",
+                            nameof(System),
+                            property.Type
+                        )
+                    );
+                    if (propertyType != null)
                     {
-                        
-                        
-                        value = jsonValueCreate.Invoke(null, new object?[]
-                        {
-                            value,
-                            options
-                        });
-                        
-                        jsonObjectAdd.Invoke(item, new object?[]
-                        {
-                            System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(property.Name),
-                            value
-                        });
-                    }
-                    
-                    */
-                    
-                    MethodInfo? jsonValueCreate = typeof(JsonValue)
-                        .GetMethods()
-                        .Where(method => method.Name == nameof(JsonValue.Create))
-                        .Where(method =>
-                            method.GetParameters().Count() == 2)
-                        .Where(method => method.GetParameters().Any(parameter =>
-                            parameter.ParameterType.IsNullableType()))
-                        .FirstOrDefault(method => method.GetParameters().Any(parameter =>  parameter.ParameterType.IsGenericType && parameter.ParameterType.GetGenericArguments()
-                            .Any(generic => generic == propertyType)));
+                        MethodInfo? jsonValueCreate = typeof(JsonValue)
+                            .GetMethods()
+                            .Where(method => method.Name == nameof(JsonValue.Create))
+                            .Where(method =>
+                                method.GetParameters().Count() == 2)
+                            .Where(method => method.GetParameters().Any(parameter =>
+                                parameter.ParameterType.IsNullableType()))
+                            .FirstOrDefault(method => method.GetParameters().Any(parameter =>
+                                parameter.ParameterType.IsGenericType && parameter.ParameterType.GetGenericArguments()
+                                    .Any(generic => generic == propertyType)));
 
-                    MethodInfo? jsonObjectAdd = typeof(JsonObject)
-                        .GetMethods()
-                        .Where(method =>  method.Name == nameof(JsonObject.Add))
-                        .FirstOrDefault(method => method.GetParameters().Count() == 2);
+                        MethodInfo? jsonObjectAdd = typeof(JsonObject)
+                            .GetMethods()
+                            .Where(method => method.Name == nameof(JsonObject.Add))
+                            .FirstOrDefault(method => method.GetParameters().Count() == 2);
 
-                    if (jsonValueCreate != null && jsonObjectAdd != null)
-                    {
-                        jsonObjectAdd.Invoke(item, new object?[]
+                        if (jsonValueCreate != null && jsonObjectAdd != null)
                         {
-                            System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(property.Name),
-                            jsonValueCreate.Invoke(null, new object?[]
+                            jsonObjectAdd.Invoke(item, new object?[]
                             {
-                                System.Convert.ChangeType(property.Value, propertyType),
-                                options
-                            })
-                        });
+                                System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(property.Name),
+                                jsonValueCreate.Invoke(null, new object?[]
+                                {
+                                    System.Convert.ChangeType(property.Value, propertyType),
+                                    options
+                                })
+                            });
+                        }
                     }
-                    
-                    /*
-                    item.Add(
-                        System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(property.Name), 
-                        JsonValue.Create<string>(item)
-                        );
-                        */
                 }
+
+                group.Add(item);
             }
 
-            result.Add(item);
+            result.Add(
+                System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(product.Key), 
+                group
+            );
         }
 
         return Ok(result);
