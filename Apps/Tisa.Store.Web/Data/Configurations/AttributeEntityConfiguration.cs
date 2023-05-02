@@ -12,5 +12,9 @@ public class AttributeEntityConfiguration : IEntityTypeConfiguration<AttributeEn
 
         builder.HasIndex(attribute => new { attribute.AttributeId, ProductId = attribute.EntityId })
             .IsUnique();
+
+        builder.HasMany(attribute => attribute.Validators)
+            .WithOne(validator => validator.AttributeEntity)
+            .HasForeignKey(validator => validator.AttributeEntityId);
     }
 }

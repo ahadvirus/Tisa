@@ -20,6 +20,9 @@ public class ApplicationContext : DbContext
     
     public DbSet<ValidatorClaim> ValidatorClaims { get; set; }
 
+    public DbSet<AttributeEntityValidator> AttributeEntityValidators { get; set; }
+    public DbSet<AttributeEntityValidatorClaim> AttributeEntityValidatorClaims { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

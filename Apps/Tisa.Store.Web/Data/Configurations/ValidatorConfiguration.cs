@@ -1,8 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tisa.Store.Web.Data.Converters;
-using Tisa.Store.Web.Infrastructures.Contracts.Validator;
 using Tisa.Store.Web.Models.Entities;
 
 namespace Tisa.Store.Web.Data.Configurations;
@@ -26,5 +23,9 @@ public class ValidatorConfiguration : IEntityTypeConfiguration<Validator>
         builder.HasMany(validator => validator.Claims)
             .WithOne(claim => claim.Validator)
             .HasForeignKey(claim => claim.ValidatorId);
+        
+        builder.HasMany(validator => validator.Attributes)
+            .WithOne(attribute => attribute.Validator)
+            .HasForeignKey(attribute => attribute.ValidatorId);
     }
 }
