@@ -13,4 +13,5 @@ public class Product
     public int AttributeEntityId { get; set; }
     public virtual AttributeEntity AttributeEntity { get; set; }
     public string Value { get; set; }
+    public int Group { get; set; }
 }

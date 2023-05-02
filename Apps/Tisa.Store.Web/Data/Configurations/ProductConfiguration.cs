@@ -10,10 +10,13 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.HasKey(product => product.Id);
         
-        builder.HasIndex(product => new { product.EntityId, product.AttributeEntityId })
+        builder.HasIndex(product => new { product.EntityId, product.AttributeEntityId, product.Group })
             .IsUnique();
         
         builder.Property(product => product.Value)
+            .IsRequired();
+        
+        builder.Property(product => product.Group)
             .IsRequired();
     }
 }
