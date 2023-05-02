@@ -13,7 +13,7 @@ namespace Tisa.Store.Web.Controllers.Entity.Attribute;
 [ApiController]
 [Route(
     template: (nameof(Models.Entities.Entity) + "/{" +
-               nameof(Models.ViewModels.Entities.Attributes.IndexVM.Entity) + ":" +
+               nameof(Models.ViewModels.Entities.Attributes.RequestVM.Entity) + ":" +
                nameof(Models.Entities.Entity) + "}/" +
                nameof(Models.Entities.Attribute)),
     Name = "[namespace].[controller]"
@@ -31,12 +31,12 @@ public class IndexController : ControllerBase
 
     [HttpGet]
     public async Task<IEnumerable<Models.ViewModels.Attributes.IndexVM>> Invoke(
-        [FromRoute] Models.ViewModels.Entities.Attributes.IndexVM entry,
+        [FromRoute] Models.ViewModels.Entities.Attributes.RequestVM request,
         CancellationToken cancellationToken
     )
     {
         return await Context.Entities
-            .Where(entity => entity.Name == entry.Entity)
+            .Where(entity => entity.Name == request.Entity)
             .SelectMany(entity => entity.Attributes)
             .Include(attribute => attribute.Attribute)
             .ThenInclude(attribute => attribute.Type)

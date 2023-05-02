@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Tisa.Store.Web.Models.ViewModels.Entities.Attributes.Validators;
 
-public class RequestVM : DeleteVM
+public class RequestVM : Models.ViewModels.Entities.Attributes.RequestVM
 {
     public RequestVM()
     {
+        Entity = string.Empty;
+        Attribute = string.Empty;
         Validator = string.Empty;
     }
     

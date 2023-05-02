@@ -11,7 +11,7 @@ namespace Tisa.Store.Web.Controllers.Entity.Attribute;
 [ApiController]
 [Route(
     template: (nameof(Models.Entities.Entity) + "/{" + 
-               nameof(Models.ViewModels.Entities.Attributes.IndexVM.Entity) + ":" + 
+               nameof(Models.ViewModels.Entities.Attributes.RequestVM.Entity) + ":" + 
                nameof(Models.Entities.Entity) + "}/" + 
                nameof(Models.Entities.Attribute)),
     Name = "[namespace].[controller]"
@@ -29,14 +29,14 @@ public class CreateController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<Models.ViewModels.Attributes.IndexVM>> Invoke(
-        [FromRoute] Models.ViewModels.Entities.Attributes.IndexVM entity,
+        [FromRoute] Models.ViewModels.Entities.Attributes.RequestVM request,
         [FromBody] Models.ViewModels.Entities.Attributes.CreateVM entry,
         CancellationToken cancellationToken
     )
     {
         Models.Entities.Attribute? attribute = await Context.Attributes
             .Where(attribute => attribute.Name == entry.Name)
-            .Include(attribute => attribute.Entites.Where(attributeEntity => attributeEntity.EntityId == entity.EntityId))
+            .Include(attribute => attribute.Entites.Where(attributeEntity => attributeEntity.EntityId == request.EntityId))
             .Include(attribute => attribute.Type)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -60,7 +60,7 @@ public class CreateController : ControllerBase
                 string.Format(
                     "The `{0}` attribute already bounded to `{1}`",
                     entry.Name,
-                    entity.Entity
+                    request.Entity
                 )
             );
 
@@ -71,7 +71,7 @@ public class CreateController : ControllerBase
         {
             Attribute = attribute,
             AttributeId = attribute.Id,
-            EntityId = entity.EntityId
+            EntityId = request.EntityId
         };
 
         await Context.AttributeEntities.AddAsync(attributeEntity, cancellationToken);

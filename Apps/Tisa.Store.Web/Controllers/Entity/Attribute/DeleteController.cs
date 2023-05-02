@@ -9,13 +9,13 @@ namespace Tisa.Store.Web.Controllers.Entity.Attribute;
 [Route(
     template: nameof(Models.Entities.Entity) + 
               "/{" + 
-              nameof(Models.ViewModels.Entities.Attributes.DeleteVM.Entity) + 
+              nameof(Models.ViewModels.Entities.Attributes.RequestVM.Entity) + 
               ":" + 
               nameof(Models.Entities.Entity) + 
               "}/" + 
               nameof(Models.Entities.Attribute) + 
               "/{" + 
-              nameof(Models.ViewModels.Entities.Attributes.DeleteVM.Attribute) + 
+              nameof(Models.ViewModels.Entities.Attributes.RequestVM.Attribute) + 
               ":" + 
               nameof(Models.Entities.AttributeEntity) + 
               "}",
@@ -32,12 +32,12 @@ public class DeleteController : ControllerBase
 
     [HttpDelete]
     public async Task<IActionResult> Invoke(
-        [FromRoute] Models.ViewModels.Entities.Attributes.DeleteVM entry,
+        [FromRoute] Models.ViewModels.Entities.Attributes.RequestVM request,
         CancellationToken cancellationToken
     )
     {
         Models.Entities.AttributeEntity? attributeEntity =
-            await Context.AttributeEntities.FindAsync(entry.AttributeEntityId, cancellationToken);
+            await Context.AttributeEntities.FindAsync(request.AttributeEntityId, cancellationToken);
         if (attributeEntity != null)
         {
             Context.AttributeEntities.Remove(attributeEntity);
