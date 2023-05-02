@@ -11,4 +11,5 @@ public class AttributeEntity
     public virtual Entity Entity { get; set; }
 
     public virtual ICollection<AttributeEntityValidator> Validators { get; set; }
+    public virtual ICollection<Product> Values { get; set; }
 }

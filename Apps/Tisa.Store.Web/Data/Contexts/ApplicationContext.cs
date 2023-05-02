@@ -13,6 +13,7 @@ public class ApplicationContext : DbContext
     public DbSet<Attribute> Attributes { get; set; }
     public DbSet<AttributeEntity> AttributeEntities { get; set; }
     public DbSet<Entity> Entities { get; set; }
+    
     public DbSet<TypeValidator> TypeValidators { get; set; }
     public DbSet<Validator> Validators { get; set; }
     
@@ -21,7 +22,10 @@ public class ApplicationContext : DbContext
     public DbSet<ValidatorClaim> ValidatorClaims { get; set; }
 
     public DbSet<AttributeEntityValidator> AttributeEntityValidators { get; set; }
+    
     public DbSet<AttributeEntityValidatorClaim> AttributeEntityValidatorClaims { get; set; }
+
+    public DbSet<Product> Products { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

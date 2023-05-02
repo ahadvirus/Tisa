@@ -16,5 +16,9 @@ public class AttributeEntityConfiguration : IEntityTypeConfiguration<AttributeEn
         builder.HasMany(attribute => attribute.Validators)
             .WithOne(validator => validator.AttributeEntity)
             .HasForeignKey(validator => validator.AttributeEntityId);
+        
+        builder.HasMany(attribute => attribute.Values)
+            .WithOne(product => product.AttributeEntity)
+            .HasForeignKey(product => product.AttributeEntityId);
     }
 }

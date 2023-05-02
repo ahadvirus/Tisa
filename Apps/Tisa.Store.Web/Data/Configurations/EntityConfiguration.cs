@@ -19,5 +19,9 @@ public class EntityConfiguration : IEntityTypeConfiguration<Entity>
         builder.HasMany(product => product.Attributes)
             .WithOne(attribute => attribute.Entity)
             .HasForeignKey(attribute => attribute.EntityId);
+        
+        builder.HasMany(product => product.Products)
+            .WithOne(product =>  product.Entity)
+            .HasForeignKey(product => product.EntityId);
     }
 }
