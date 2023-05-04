@@ -51,7 +51,6 @@ public class IndexController : ControllerBase
                     Type = product.AttributeEntity.Attribute.Type.Name
                 })
             })
-            //.ProjectTo<Models.DataTransfers.Products.ProductDTO>(Mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
 
         JsonNodeOptions options = new JsonNodeOptions()
@@ -60,8 +59,6 @@ public class IndexController : ControllerBase
         };
 
         JsonArray result = new JsonArray(options);
-
-        //List<JsonObject> result = new List<JsonObject>();
 
         foreach (Models.DataTransfers.Products.ProductDTO product in products)
         {
@@ -77,45 +74,6 @@ public class IndexController : ControllerBase
                 );
                 if (propertyType != null)
                 {
-                    /*
-                    object? value = System.Convert.ChangeType(property.Value, propertyType);
-                    
-                    
-                    MethodInfo? jsonValueCreate = typeof(JsonValue)
-                        .GetMethods()
-                        .Where(method => method.Name == nameof(JsonValue.Create))
-                        .Where(method =>
-                            method.GetParameters().Count() == 2)
-                        .Where(method => method.GetParameters().Any(parameter =>
-                            value == null ? parameter.ParameterType.IsNullableType() : !parameter.ParameterType.IsNullableType()))
-                        .FirstOrDefault(method => method.GetParameters().Any(parameter => value == null ? (
-                            parameter.ParameterType.IsGenericType && parameter.ParameterType.GetGenericArguments()
-                                .Any(generic => generic == propertyType)) : (parameter.ParameterType == propertyType)));
-
-                    MethodInfo? jsonObjectAdd = typeof(JsonObject)
-                        .GetMethods()
-                        .Where(method =>  method.Name == nameof(JsonObject.Add))
-                        .FirstOrDefault(method => method.GetParameters().Count() == 2);
-
-                    if (jsonValueCreate != null && jsonObjectAdd != null)
-                    {
-                        
-                        
-                        value = jsonValueCreate.Invoke(null, new object?[]
-                        {
-                            value,
-                            options
-                        });
-                        
-                        jsonObjectAdd.Invoke(item, new object?[]
-                        {
-                            System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(property.Name),
-                            value
-                        });
-                    }
-                    
-                    */
-                    
                     MethodInfo? jsonValueCreate = typeof(JsonValue)
                         .GetMethods()
                         .Where(method => method.Name == nameof(JsonValue.Create))
@@ -143,13 +101,6 @@ public class IndexController : ControllerBase
                             })
                         });
                     }
-                    
-                    /*
-                    item.Add(
-                        System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(property.Name), 
-                        JsonValue.Create<string>(item)
-                        );
-                        */
                 }
             }
 
