@@ -11,7 +11,6 @@ public class MathematicsParameterValidator : ValidatorParameter
 
         if (parameter != null)
         {
-
             if (parameter is string)
             {
                 if (await ParameterIsAttribute((string)parameter))
@@ -25,7 +24,24 @@ public class MathematicsParameterValidator : ValidatorParameter
             }
             else
             {
-                foreach (Type? type in new Type?[] { Type.GetType(nameof(Int32)), Type.GetType(nameof(Single)) })
+                foreach (Type? type in new Type?[]
+                         {
+                             Type.GetType(
+                                 string.Format(
+                                     "{0}.{1}",
+                                     nameof(System),
+                                     nameof(Int32)
+                                 )
+                             ),
+                             Type.GetType(
+                                 string.Format(
+                                     "{0}.{1}",
+                                     nameof(System),
+                                     nameof(Single)
+                                 )
+                             )
+                         }
+                        )
                 {
                     if (type != null && parameter.GetType() == type)
                     {
