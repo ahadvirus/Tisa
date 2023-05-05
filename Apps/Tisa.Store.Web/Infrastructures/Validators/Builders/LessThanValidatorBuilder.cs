@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FluentValidation.Validators;
+using Tisa.Store.Web.Infrastructures.Contracts.Validator;
 
 namespace Tisa.Store.Web.Infrastructures.Validators.Builders;
 

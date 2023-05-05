@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using FluentValidation.Validators;
+using Tisa.Store.Web.Infrastructures.Contracts.Validator;
 using Tisa.Store.Web.Infrastructures.Contracts.DataTransfers;
 
 namespace Tisa.Store.Web.Infrastructures.Validators;
