@@ -28,7 +28,7 @@ public class ValidateParameter : ParameterConvertor
         if (Attribute.GetType != null)
         {
             result = await Validator.Validate(
-                ConvertTo(parameter, Attribute),
+                 await ConvertTo(parameter, Attribute),
                 Attribute.GetType,
                 ValidateAttribute
             );

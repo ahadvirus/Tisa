@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Tisa.Store.Web.Infrastructures.Contracts.Validator;
@@ -7,7 +6,7 @@ using Tisa.Store.Web.Infrastructures.Contracts.DataTransfers;
 
 namespace Tisa.Store.Web.Infrastructures.Validators;
 
-public class ValidatorRule : ParameterConvertor
+public class ValidatorRule<T> : ParameterConvertor
 {
     private IAttributeDTO Attribute { get; }
 
@@ -36,22 +35,22 @@ public class ValidatorRule : ParameterConvertor
 
             if (await parameter.IsValid(Validator.Parameters) && Validator.ValidatorBuilder != null)
             {
-                MethodInfo? build = Validator.GetType()
+                MethodInfo? build = Validator.ValidatorBuilder.GetType()
                     .GetMethod(nameof(Validator.ValidatorBuilder.Build));
 
                 if (build != null)
                 {
-                    System.Type instanceType = typeof(List<dynamic>).GetGenericArguments().First();
+                    System.Type instanceType = typeof(T);
                     System.Type? propertyType = Attribute.GetType;
                     if (propertyType != null)
                     {
                         build = build.MakeGenericMethod(new System.Type[] { instanceType, propertyType });
 
                         object? invoke = build.Invoke(Validator.ValidatorBuilder,
-                            new object?[] { ConvertTo(Validator.Parameters, Attribute) });
-                        if (invoke != null && invoke.GetType() == typeof(IPropertyValidator))
+                            new object?[] { await ConvertTo(Validator.Parameters, Attribute) });
+                        if (invoke != null && invoke.GetType() == typeof(Task<IPropertyValidator?>))
                         {
-                            result = (IPropertyValidator)invoke;
+                            result = await (Task<IPropertyValidator?>)invoke;
                         }
                     }
                 }

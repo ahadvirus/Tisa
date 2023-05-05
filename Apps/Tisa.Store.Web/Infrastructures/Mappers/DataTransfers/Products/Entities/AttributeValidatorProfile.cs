@@ -35,6 +35,10 @@ public class AttributeValidatorProfile : Profile
         CreateMap<Models.DataTransfers.Products.Entities.AttributeEntityDTO,
             Models.DataTransfers.Products.Entities.AttributeDTO>();
 
+        CreateMap<
+            Infrastructures.Contracts.DataTransfers.IAttributeEntityDTO,
+            Models.DataTransfers.Products.Entities.AttributeDTO>();
+            
         CreateMap<Infrastructures.Contracts.DataTransfers.IAttributeEntityDTO,
                 Infrastructures.Contracts.DataTransfers.IAttributeDTO>()
             .As<Models.DataTransfers.Products.Entities.AttributeDTO>();

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Windows;
-using Tisa.Store.Models.DataTransfers;
-using Tisa.Store.Models.Entities;
-using Tisa.Store.Models.ViewModels;
-using Tisa.Store.Pages;
+using Tisa.Store.Models;
+using Expression = System.Linq.Expressions.Expression;
 
 namespace Tisa.Store
 {
@@ -13,14 +13,39 @@ namespace Tisa.Store
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ApplicationViewModel ViewModel { get; }
+        //private ApplicationViewModel ViewModel { get; }
 
-        private Models.Data.Contexts.AppContext DbContext { get; }
+        //private Models.Data.Contexts.AppContext DbContext { get; }
+
+        private string ClassName
+        {
+            get
+            {
+                return "Entity";
+            }
+        }
+        
+        private object? Entity { get; }
 
         public MainWindow()
         {
             InitializeComponent();
 
+            ClassBuilder classBuilder = new ClassBuilder(ClassName);
+
+            Entity = classBuilder.CreateObject(new Dictionary<string, Type>()
+            {
+                { "Id", typeof(int) },
+                { "Name", typeof(string) },
+                { "Count", typeof(string) }
+            });
+
+            if (Entity != null)
+            {
+                Debug.WriteLine(string.Format("\n\n{0}\n\n", Entity.GetType().FullName));
+            }
+
+            /*
             DbContext = new Models.Data.Contexts.AppContext();
 
             ViewModel = new ApplicationViewModel(
@@ -52,6 +77,7 @@ namespace Tisa.Store
                 UIElement element = menu.Element;
                 MenuStackPanel.Children.Add(element);
             }
+            */
 
             //MainFramePage = new MainPage(ViewModels.Products, ViewModels.Filters);
         }
@@ -121,19 +147,42 @@ namespace Tisa.Store
 
         private void ListButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.Page = new MainPage();
+            Type? entityType = Type.GetType(ClassName);
+            if (entityType != null)
+            {
+                Debug.WriteLine(string.Format("\n\n{0}\n\n", entityType.FullName));
+            }
+            //ViewModel.Page = new MainPage();
         }
 
         private void FilterButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.Page = new FilterPage();
+            if (Entity == null)
+            {
+                return;
+            }
+            
+            Type instanceType = Entity.GetType();
+        
+            ParameterExpression instance = Expression.Parameter(instanceType, ClassName.ToLower());
+
+            Type propertyType = typeof(int);
+            
+            Type propertyFunc = typeof(Func<,>).MakeGenericType(instanceType, propertyType);
+        
+            MemberExpression property = Expression.Property(instance, "Id");
+            
+            LambdaExpression expression = Expression.Lambda(propertyFunc, property, instance);
+            
+            Debug.WriteLine("\n\n OK \n\n");
+            //ViewModel.Page = new FilterPage();
         }
 
         private void SaveButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.Selected = new Product();
+            //ViewModel.Selected = new Product();
 
-            ViewModel.Page = new NewPage();
+            //ViewModel.Page = new NewPage();
         }
     }
 }

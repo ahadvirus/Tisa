@@ -53,8 +53,6 @@ public class IndexController : ControllerBase
             return Ok(await Context.AttributeEntityValidators
                 .Where(validator => validator.AttributeEntityId == entry.AttributeEntityId)
                 .Where(attribute => attribute.Validator.Types.Any(type => type.TypeId == attributeTypeId))
-                .Include(attribute => attribute.Validator)
-                .Include(attribute => attribute.Claims)
                 .ProjectTo<Models.ViewModels.Entities.Attributes.Validators.IndexVM>(
                     Mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken));

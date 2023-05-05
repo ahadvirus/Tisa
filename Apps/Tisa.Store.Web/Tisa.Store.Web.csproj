@@ -24,11 +24,14 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
     <PackageReference Include="MySql.Data" Version="8.0.33" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="7.0.2" />
+    <PackageReference Include="NJection.LambdaConverter" Version="1.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\Migrations" />
+    <Folder Include="Data\Persistance" />
+    <Folder Include="Infrastructures\Mappers\ViewModels" />
   </ItemGroup>
 
 </Project>

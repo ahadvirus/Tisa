@@ -12,6 +12,7 @@ using Tisa.Store.Web.Data.Contexts;
 using Tisa.Store.Web.Infrastructures.Extensions;
 using Tisa.Store.Web.Infrastructures.Routes.Constraints;
 using Tisa.Store.Web.Infrastructures.Routes.Conventions;
+using Tisa.Store.Web.Infrastructures.Validators;
 
 namespace Tisa.Store.Web;
 
@@ -55,6 +56,10 @@ public class Startup
             options => options.UseMySQL(connectionStringBuilder.ConnectionString)
             /* .UseInMemoryDatabase(name) */
             /* .UseSqlite(connectionStringBuilder.ConnectionString) */
+        );
+
+        services.AddTransient<ValidatorFactory>(provider =>
+            new ValidatorFactory(typeof(Validator<>), provider)
         );
 
         services.Configure<JsonOptions>(options => { options.SerializerOptions.PropertyNameCaseInsensitive = false; });

@@ -17,13 +17,13 @@ public class ParameterConvertor : ValidatorAttribute
             entry.Contains(Separator)
                 ? entry.Split(Separator)
                     .Where(item => !string.IsNullOrEmpty(item))
-                    .Select(item => ChangeType(item, attribute))
+                    .Select(async item => await ChangeType(item, attribute))
                 : (
                     !string.IsNullOrEmpty(entry)
                         ? (
                             await ParameterIsAttribute(entry)
                                 ? entry
-                                : ChangeType(entry, attribute)
+                                : await ChangeType(entry, attribute)
                         )
                         : null
                 )
