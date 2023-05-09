@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Converters\" />
     <Folder Include="Data\Migrations" />
     <Folder Include="Data\Persistance" />
     <Folder Include="Infrastructures\Mappers\ViewModels" />
