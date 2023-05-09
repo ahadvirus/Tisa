@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -71,22 +71,24 @@ public class CreateController : ControllerBase
             .Where(attribute => attribute.EntityId == request.EntityId)
             .ProjectTo<IAttributeEntityDTO>(Mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
+        
 
         // Converting data to product
 
-        IDictionary<string, object?> values = (
-                new CreateVM(
-                    Mapper.Map<IEnumerable<IAttributeEntityDTO>, IEnumerable<IAttributeDTO>>(attributes.Where(attribute => attribute.Name != Key)),
-                    (JsonElement)entry
-                )
-            )
-            .GetValues();
+        IDictionary<string, object?>? values = await objectType.AccumulateData(
+                Mapper.Map<IEnumerable<IAttributeEntityDTO>, IEnumerable<IAttributeDTO>>(
+                    attributes.Where(attribute => attribute.Name != Key))
+        );
+
+        if (values == null)
+        {
+            return BadRequest();
+        }
 
         // Create dynamic class
 
         object? entity = (new Infrastructures.Dynamic.ClassBuilder(request.Entity)).CreateObject(
             attributes
-                .Where(attribute => attribute.Name == Key)
                 .ToDictionary(attribute => attribute.Name, attribute => attribute.GetType)
         );
 
@@ -125,9 +127,46 @@ public class CreateController : ControllerBase
 
             return BadRequest(ModelState);
         }
-        
-        
 
-        return Ok(entry.GetType());
+        // Generate Id for product
+
+        int id = await Context.Products
+            .Where(product => product.EntityId == request.EntityId)
+            .Select(product => product.Group)
+            .OrderBy(group => group)
+            .LastOrDefaultAsync(cancellationToken);
+
+        values.Add(Key, (id + 1));
+
+        // Convert data to SQL table
+
+        IEnumerable<Models.Entities.Product> products = attributes
+            .Select(attribute => new Models.Entities.Product()
+            {
+                AttributeEntityId = attribute.Id,
+                EntityId = request.EntityId,
+                Value = values.TryGetValue(attribute.Name, out object? value) ? (value != null ? (string)Convert.ChangeType(value, TypeCode.String) : string.Empty) : string.Empty,
+                Group = values.TryGetValue(Key, out object? group) ? (group != null ? (int)group : 0) : 0
+            });
+
+        try
+        {
+            await Context.Products.AddRangeAsync(products, cancellationToken);
+            await Context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+
+        // Adding the Id product to entity
+        PropertyInfo? idProperty = entity.GetType().GetProperty(Key);
+        
+        if (idProperty != null)
+        {
+            idProperty.SetValue(entity, values[Key]);
+        }
+        
+        return Ok(entity);
     }
 }

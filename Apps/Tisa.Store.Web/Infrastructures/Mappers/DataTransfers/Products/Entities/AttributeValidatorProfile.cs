@@ -42,5 +42,19 @@ public class AttributeValidatorProfile : Profile
         CreateMap<Infrastructures.Contracts.DataTransfers.IAttributeEntityDTO,
                 Infrastructures.Contracts.DataTransfers.IAttributeDTO>()
             .As<Models.DataTransfers.Products.Entities.AttributeDTO>();
+
+        CreateMap<Models.DataTransfers.Products.Entities.AttributeEntityDTO, Models.Entities.Product>()
+            .ForMember(des => des.EntityId,
+                opt => opt.Ignore())
+            .ForMember(des => des.AttributeEntityId,
+                opt => opt.MapFrom(
+                    src => src.Id
+                ))
+            .ForMember(des => des.Value,
+                opt => opt.Ignore())
+            .ForMember(des => des.Group,
+                opt => opt.Ignore());
+
+
     }
 }
