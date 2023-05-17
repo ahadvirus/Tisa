@@ -10,7 +10,7 @@ using Tisa.Store.Web.Ui.Infrastructures.Contracts;
 
 namespace Tisa.Store.Web.Ui.Infrastructures.Extensions;
 
-public static class ApplySeed
+public static class ApplySeedExtension
 {
     public static async void UseApplySeedFromAssembly(this WebApplication app, Assembly assembly)
     {
