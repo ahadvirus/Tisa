@@ -14,7 +14,6 @@ using Tisa.Store.Web.Ui.Data.Repositories.Persistences;
 using Tisa.Store.Web.Ui.Data.Repositories.Persistences.Apis;
 using Tisa.Store.Web.Ui.Infrastructures.Configurations;
 using Tisa.Store.Web.Ui.Infrastructures.Extensions;
-using MySqlConnection = Tisa.Store.Web.Ui.Infrastructures.Configurations.MySqlConnection;
 
 namespace Tisa.Store.Web.Ui;
 
@@ -22,20 +21,35 @@ public static class Startup
 {
     public static void ConfigurationService(IServiceCollection services, IConfiguration configuration)
     {
-        string resourcesPath = nameof(LocalizationOptions.ResourcesPath)
+        string localizationResourcesPath = nameof(LocalizationOptions.ResourcesPath)
             .Replace(oldValue: nameof(System.IO.Path), newValue: string.Empty);
 
-        services.AddLocalization(setupAction: options => options.ResourcesPath = resourcesPath);
-        
+        services.AddLocalization(setupAction: options => options.ResourcesPath = localizationResourcesPath);
+
         services.AddControllersWithViews()
-            .AddViewLocalization(setupAction: options => options.ResourcesPath = resourcesPath)
+            .AddViewLocalization(setupAction: options => options.ResourcesPath = localizationResourcesPath)
             .AddDataAnnotationsLocalization();
+
+
+        services.AddScoped<ApiContext>();
+
+        services.AddScoped<IApiTypeRepository, ApiTypeRepository>();
+
+        services.AddScoped<ITypeRepository, TypeRepository>();
+
+        services.Configure<RequestLocalizationOptions>(configureOptions: LocalizationOption);
+
+        services.AddRouting(configureOptions: options =>
+        {
+            options.LowercaseQueryStrings = true;
+            options.LowercaseUrls = true;
+        });
 
         ApiOption? option =
             configuration.GetSection(key:
-                string.Format(
-                    format: "{0}:{1}",
-                    args: new object?[] { nameof(Api), nameof(Option) }
+                    string.Format(
+                        format: "{0}:{1}",
+                        args: new object?[] { nameof(Api), nameof(Option) }
                     )
                 )
                 .Get<ApiOption>();
@@ -49,32 +63,21 @@ public static class Startup
             key: string.Format(
                 format: "{0}:{1}",
                 args: new object?[] { nameof(DbContext.Database), nameof(MySql) }
-                )
+            )
         ).Get<MySqlConnection>();
 
         if (connection != null)
         {
-            services.AddDbContext<ApplicationContext>(optionsAction: options => options.UseMySQL(connection.String()));
+            services.AddDbContext<ApplicationContext>(optionsAction: options =>
+                options.UseMySQL(connectionString: connection.String())
+            );
         }
-
-
-        services.AddScoped<ApiContext>();
-
-        services.AddScoped<IApiTypeRepository, ApiTypeRepository>();
-
-        services.AddScoped<ITypeRepository, TypeRepository>();
-
-        services.AddRequestLocalization(configureOptions: LocalizationOption);
-
     }
 
     public static void Configuration(WebApplication app)
     {
         app.UseApplySeedFromAssembly(typeof(Startup).Assembly);
-
-        app.UseRequestCulture();
-
-        //
+        
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");
@@ -84,7 +87,10 @@ public static class Startup
 
         app.UseRequestLocalization(optionsAction: LocalizationOption);
 
+        app.UseRequestCulture();
+
         app.UseHttpsRedirection();
+
         app.UseStaticFiles();
 
         app.UseRouting();
@@ -107,7 +113,7 @@ public static class Startup
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="options"></param>
+    /// <param name="options"><see cref="RequestLocalizationOptions"/></param>
     private static void LocalizationOption(RequestLocalizationOptions options)
     {
         string persianCulture = "fa-IR";
