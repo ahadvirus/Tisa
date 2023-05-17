@@ -44,20 +44,48 @@ public class TypeRepository : ITypeRepository
         return predicate != null ? result.Where(predicate: predicate) : result;
     }
 
-    public Task<Models.DataTransfers.TypeDto> Get(int primary)
+    /// <summary>
+    /// Fetching only one Type from database
+    /// </summary>
+    /// <param name="primary"><see cref="int"/>Primary key in database</param>
+    /// <returns><see cref="Models.DataTransfers.TypeDto"/></returns>
+    /// <exception cref="System.Exception">Happened when send wrong Id (Primary key)</exception>
+    public async Task<Models.DataTransfers.TypeDto> Get(int primary)
     {
-        throw new System.NotImplementedException();
+        Models.DataTransfers.TypeDto? result = await Set
+            .Where(type => type.Id == primary)
+            .Select(type => new Models.DataTransfers.TypeDto()
+            {
+                Id = type.Id,
+                Display = type.Name,
+                TypeId = type.TypeId
+            })
+            .FirstOrDefaultAsync();
+
+        if (result == null)
+        {
+            throw new System.Exception(message: Localizer["InvalidType"]);
+        }
+
+        Models.DataTransfers.Api.TypeDto? dto = await Api.Types.Get(id: result.TypeId);
+
+        if (dto == null)
+        {
+            throw new System.Exception(message: Localizer["InvalidType"]);
+        }
+
+        return result with { Name = dto.Name };
     }
 
     /// <summary>
-    /// 
+    /// Adding new Type to database
     /// </summary>
     /// <param name="entry"><see cref="Models.DataTransfers.TypeDto"/></param>
     /// <returns><see cref="Models.DataTransfers.TypeDto"/></returns>
     /// <exception cref="System.Exception">When throw the exception send invalid TypeId or exist TypeId</exception>
     public async Task<Models.DataTransfers.TypeDto> Add(Models.DataTransfers.TypeDto entry)
     {
-        Models.DataTransfers.Api.TypeDto? dto = await Api.Types.Get(entry.TypeId);
+        Models.DataTransfers.Api.TypeDto? dto = await Api.Types.Get(id: entry.TypeId);
 
         if (dto == null)
         {

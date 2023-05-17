@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -37,8 +38,13 @@ public class ApiTypeRepository : IApiTypeRepository
             {
                 if (message.IsSuccessStatusCode)
                 {
-                    IEnumerable<TypeDto>?  content = JsonSerializer.Deserialize<IEnumerable<TypeDto>>(
-                        await message.Content.ReadAsStringAsync());
+                    JsonSerializerOptions options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    string response = await message.Content.ReadAsStringAsync();
+                    Debug.WriteLine(message: string.Format(format:"\n{0}\n", args: new object?[]{response}));
+                    IEnumerable<TypeDto>?  content = JsonSerializer.Deserialize<IEnumerable<TypeDto>>(json: response, options: options);
 
                     if (content != null)
                     {
@@ -61,8 +67,14 @@ public class ApiTypeRepository : IApiTypeRepository
             {
                 if (message.IsSuccessStatusCode)
                 {
-                    result = JsonSerializer.Deserialize<TypeDto>(
-                        await message.Content.ReadAsStringAsync());
+                    JsonSerializerOptions options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    string response = await message.Content.ReadAsStringAsync();
+                    Debug.WriteLine(message: string.Format(format: "\n{0}\n", args: new object?[] { response }));
+
+                    result = JsonSerializer.Deserialize<TypeDto>(json: response, options: options);
                 }
             }
         }
