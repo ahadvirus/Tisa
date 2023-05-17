@@ -1,7 +1,16 @@
-﻿namespace Tisa.Store.Web.Ui.Models.DataTransfers.Api;
+﻿using System.Text.Json.Serialization;
+
+namespace Tisa.Store.Web.Ui.Models.DataTransfers.Api;
 
 public record TypeDto
 {
-    public int Id { get; init; }
-    public string Name { get; init; }
+    [JsonConstructor]
+    public TypeDto(int id, string name)
+    {
+        Id = id;
+        Name = name;
+    }
+
+    public int Id { get; }
+    public string Name { get; }
 }
