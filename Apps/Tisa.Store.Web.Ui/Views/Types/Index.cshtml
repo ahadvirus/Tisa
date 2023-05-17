@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Models.DataTransfers.TypeDto>
+﻿@using Tisa.Store.Web.Ui.Controllers
+@model IEnumerable<Models.DataTransfers.TypeDto>
 @{
     ViewData[nameof(View.Title)] = ViewLocalizer[nameof(View.Title)];
 }
@@ -9,13 +10,10 @@
             <div class="min-w-0 flex-1">
                 <!-- Profile -->
                 <div class="flex items-center">
-                    <img class="hidden h-16 w-16 rounded-full sm:block"
-                         src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2.6&amp;w=256&amp;h=256&amp;q=80"
-                         alt="">
                     <div>
                         <div class="flex items-center">
                             <h1 class="mr-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
-                                @ViewLocalizer[nameof(View.Title)]
+                                @ViewData[nameof(View.Title)]
                             </h1>
                         </div>
                     </div>
@@ -26,11 +24,7 @@
 </div>
 
 <div class="mt-8">
-
-    <h2 class="mx-auto mt-8 max-w-6xl px-4 text-lg font-medium leading-6 text-gray-900 sm:px-6 lg:px-8">
-        Recent activity
-    </h2>
-
+    
     <!-- Activity list (smallest breakpoint only) -->
     <div>
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -41,12 +35,12 @@
                 <ul role="list"
                     class="mt-2 divide-y divide-gray-200 overflow-hidden shadow">
 
-                    <li class="flex flex-column sm:flex-row bg-gray-50 text-gray-900">
-                        <a class="w-4/12 px-6 py-3 text-left text-sm font-semibold text-right">
+                    <li class="flex flex-col sm:flex-row bg-gray-50 text-gray-900">
+                        <a class="sm:w-4/12 w-100 px-6 py-3 text-sm font-semibold text-right">
                             @Html.DisplayNameFor(expression: model => model.Id)
                         </a>
-                        <a class="w-8/12 px-6 py-3 text-left text-sm font-semibold text-right">
-                            @Html.DisplayNameFor(expression: model => model.Name)
+                        <a class="sm:w-8/12 mt-5 sm:mt-0 w-100 px-6 py-3 text-sm font-semibold text-right">
+                            @Html.DisplayNameFor(expression: model => model.Display)
                         </a>
 
                     </li>
@@ -55,34 +49,12 @@
                     {
 
                         <li>
-                            <a href="#" class="block flex flex-column sm:flex-row text-gray-900 bg-white px-4 py-4 hover:bg-gray-50">
-                                <span class="flex items-center space-x-4 space-x-reverse">
-                                    <span class="flex flex-1 space-x-2 truncate">
-                                        <svg class="h-5 w-5 flex-shrink-0 text-gray-400"
-                                             x-description="Heroicon name: mini/banknotes"
-                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                             fill="currentColor" aria-hidden="true">
-                                            <path fill-rule="evenodd"
-                                                  d="M1 4a1 1 0 011-1h16a1 1 0 011 1v8a1 1 0 01-1 1H2a1 1 0 01-1-1V4zm12 4a3 3 0 11-6 0 3 3 0 016 0zM4 9a1 1 0 100-2 1 1 0 000 2zm13-1a1 1 0 11-2 0 1 1 0 012 0zM1.75 14.5a.75.75 0 000 1.5c4.417 0 8.693.603 12.749 1.73 1.111.309 2.251-.512 2.251-1.696v-.784a.75.75 0 00-1.5 0v.784a.272.272 0 01-.35.25A49.043 49.043 0 001.75 14.5z"
-                                                  clip-rule="evenodd"></path>
-                                        </svg>
-                                        <span class="flex flex-col truncate text-sm text-gray-500">
-                                            <span class="truncate">Payment to Molly Sanders</span>
-                                            <span>
-                                                <span class="font-medium text-gray-900">$20,000</span>
-                                                USD
-                                            </span>
-                                            <time datetime="2020-07-11">July 11, 2020</time>
-                                        </span>
-                                    </span>
-                                    <svg class="h-5 w-5 flex-shrink-0 text-gray-400"
-                                         x-description="Heroicon name: mini/chevron-right"
-                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                         fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd"
-                                              d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                                              clip-rule="evenodd"></path>
-                                    </svg>
+                            <a href="@Html.Raw(Url.Action(action: nameof(TypesController.Edit), controller: nameof(TypesController).RemoveController(), values: new { item.Id }))" class="flex flex-col sm:flex-row text-gray-900 bg-white px-4 py-4 hover:bg-gray-50">
+                                <span class="w-100 sm:w-4/12 text-lg font-semibold text-right">
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </span>
+                                <span class="w-100 mt-5 sm:mt-0 sm:w-8/12 text-lg font-semibold text-right">
+                                    @Html.DisplayFor(modelItem => item.Display)
                                 </span>
                             </a>
                         </li>
