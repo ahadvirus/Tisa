@@ -1,0 +1,25 @@
+﻿@{
+    ViewData[nameof(View.Title)] = ViewLocalizer[nameof(View.Title)];
+}
+<!-- Page header -->
+<div class="bg-white shadow">
+    <div class="px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
+        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+            <div class="min-w-0 flex-1">
+                <!-- Profile -->
+                <div class="flex items-center">
+                    <img class="hidden h-16 w-16 rounded-full sm:block"
+                         src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2.6&amp;w=256&amp;h=256&amp;q=80"
+                         alt="">
+                    <div>
+                        <div class="flex items-center">
+                            <h1 class="mr-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
+                                @ViewLocalizer[nameof(View.Title)]
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
