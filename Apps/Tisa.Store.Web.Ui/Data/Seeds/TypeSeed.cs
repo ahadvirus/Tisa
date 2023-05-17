@@ -28,7 +28,7 @@ public class TypeSeed : ISeed<ITypeRepository>
         {
             try
             {
-                await repository.Add(new Models.DataTransfers.TypeDto() { Name = type.Name, TypeId = type.Id });
+                await repository.Add(entry: new Models.DataTransfers.TypeDto() { Name = type.Name, TypeId = type.Id });
             }
             catch (Exception e)
             {

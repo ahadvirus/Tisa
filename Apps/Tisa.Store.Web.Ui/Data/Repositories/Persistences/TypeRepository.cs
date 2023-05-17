@@ -119,7 +119,7 @@ public class TypeRepository : ITypeRepository
 
         Models.Entities.Type entity = new Models.Entities.Type()
         {
-            Name = entry.Name,
+            Name = entry.Display,
             TypeId = entry.TypeId
         };
 
@@ -149,7 +149,7 @@ public class TypeRepository : ITypeRepository
         Models.Entities.Type entity = new Models.Entities.Type()
         {
             Id = entry.Id,
-            Name = entry.Name,
+            Name = entry.Display,
             TypeId = entry.TypeId
         };
 

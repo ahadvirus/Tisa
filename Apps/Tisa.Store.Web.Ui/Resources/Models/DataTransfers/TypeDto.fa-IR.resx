@@ -120,6 +120,9 @@
   <data name="Display" xml:space="preserve">
     <value>جنس</value>
   </data>
+  <data name="DisplayRequiredErrorMessage" xml:space="preserve">
+    <value>لطفا نام {0} را ارسال کنید</value>
+  </data>
   <data name="Id" xml:space="preserve">
     <value>ردیف</value>
   </data>
