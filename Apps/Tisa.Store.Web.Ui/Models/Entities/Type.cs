@@ -1,4 +1,5 @@
-﻿using Tisa.Store.Web.Ui.Infrastructures.Contracts;
+﻿using System.Collections.Generic;
+using Tisa.Store.Web.Ui.Infrastructures.Contracts;
 
 namespace Tisa.Store.Web.Ui.Models.Entities;
 
@@ -21,5 +22,9 @@ public class Type : IEntity<int>
     /// Save Type Id from the Api
     /// </summary>
     public int TypeId { get; set; }
+    /// <summary>
+    /// All Attributes related to the type
+    /// </summary>
+    public virtual ICollection<Attribute> Attributes { get; set; }
 
 }
