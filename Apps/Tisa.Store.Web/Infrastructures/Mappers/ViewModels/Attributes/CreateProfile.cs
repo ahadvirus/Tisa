@@ -11,7 +11,7 @@ public class CreateProfile : Profile
                 opt => opt.MapFrom(
                     src => src.Title
                 ))
-            .ForMember(des => des.Discription,
+            .ForMember(des => des.Description,
                 opt => opt.MapFrom(
                     src => src.Description
                 ))

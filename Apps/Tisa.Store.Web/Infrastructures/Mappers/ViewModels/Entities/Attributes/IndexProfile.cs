@@ -17,7 +17,7 @@ public class IndexProfile : Profile
                 ))
             .ForMember(des => des.Description,
                 opt => opt.MapFrom(
-                    src => src.Attribute.Discription
+                    src => src.Attribute.Description
                 ))
             .ForMember(des => des.Type,
                 opt => opt.MapFrom(

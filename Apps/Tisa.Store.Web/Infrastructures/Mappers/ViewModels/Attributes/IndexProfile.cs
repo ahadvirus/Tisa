@@ -7,7 +7,7 @@ public class IndexProfile : Profile
     public IndexProfile()
     {
         CreateMap<Models.Entities.Attribute, Models.ViewModels.Attributes.IndexVM>()
-            .ForMember(des => des.Id,
+            .ForMember(des => des.Id, 
                 opt => opt.MapFrom(
                     src => src.Id
                 ))
@@ -17,7 +17,7 @@ public class IndexProfile : Profile
                 ))
             .ForMember(des => des.Description,
                 opt => opt.MapFrom(
-                    src => src.Discription
+                    src => src.Description
                 ))
             .ForMember(des => des.Type,
                 opt => opt.MapFrom(
