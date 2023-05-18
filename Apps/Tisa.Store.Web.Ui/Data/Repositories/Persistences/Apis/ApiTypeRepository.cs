@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -11,10 +10,8 @@ using Tisa.Store.Web.Ui.Models.DataTransfers.Api;
 
 namespace Tisa.Store.Web.Ui.Data.Repositories.Persistences.Apis;
 
-public class ApiTypeRepository : IApiTypeRepository
+public class ApiTypeRepository : ApiRepository, IApiTypeRepository
 {
-    protected ApiOption Option { get; }
-
     protected string Address
     {
         get
@@ -23,28 +20,26 @@ public class ApiTypeRepository : IApiTypeRepository
         }
     }
 
-    public ApiTypeRepository(ApiOption option)
+    public ApiTypeRepository(ApiOption option) : base(option)
     {
-        Option = option;
     }
 
     public async Task<IEnumerable<TypeDto>> Get(Func<TypeDto, bool>? predicate = null)
     {
         IEnumerable<TypeDto> result = new TypeDto[] { };
 
-        using (HttpClient client = new HttpClient() { BaseAddress = new Uri(Option.Address) })
+        using (HttpClient client = await ClientAsync())
         {
             using (HttpResponseMessage message = await client.GetAsync(requestUri: Address))
             {
                 if (message.IsSuccessStatusCode)
                 {
-                    JsonSerializerOptions options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    };
-                    string response = await message.Content.ReadAsStringAsync();
-                    Debug.WriteLine(message: string.Format(format:"\n{0}\n", args: new object?[]{response}));
-                    IEnumerable<TypeDto>?  content = JsonSerializer.Deserialize<IEnumerable<TypeDto>>(json: response, options: options);
+                    await LogAsync(await message.Content.ReadAsStringAsync());
+
+                    IEnumerable<TypeDto>? content = await JsonSerializer.DeserializeAsync<IEnumerable<TypeDto>>(
+                        utf8Json: await message.Content.ReadAsStreamAsync(),
+                        options: JsonOptions
+                        );
 
                     if (content != null)
                     {
@@ -61,20 +56,19 @@ public class ApiTypeRepository : IApiTypeRepository
     {
         TypeDto? result = null;
 
-        using (HttpClient client = new HttpClient() { BaseAddress = new Uri(Option.Address) })
+        using (HttpClient client = await ClientAsync())
         {
             using (HttpResponseMessage message = await client.GetAsync(requestUri: string.Format(format: "{0}/{1}", args: new object?[] { Address, id })))
             {
                 if (message.IsSuccessStatusCode)
                 {
-                    JsonSerializerOptions options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    };
-                    string response = await message.Content.ReadAsStringAsync();
-                    Debug.WriteLine(message: string.Format(format: "\n{0}\n", args: new object?[] { response }));
 
-                    result = JsonSerializer.Deserialize<TypeDto>(json: response, options: options);
+                    await LogAsync(await message.Content.ReadAsStringAsync());
+
+                    result = await JsonSerializer.DeserializeAsync<TypeDto>(
+                        utf8Json: await message.Content.ReadAsStreamAsync(),
+                        options: JsonOptions
+                        );
                 }
             }
         }
