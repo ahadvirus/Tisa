@@ -64,7 +64,7 @@ namespace Tisa.Store.Web.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false),
-                    Discription = table.Column<string>(type: "longtext", nullable: false),
+                    Description = table.Column<string>(type: "longtext", nullable: false),
                     TypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -177,6 +177,84 @@ namespace Tisa.Store.Web.Data.Migrations
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "AttributeEntityValidators",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    AttributeEntityId = table.Column<int>(type: "int", nullable: false),
+                    ValidatorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AttributeEntityValidators", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AttributeEntityValidators_AttributeEntities_AttributeEntityId",
+                        column: x => x.AttributeEntityId,
+                        principalTable: "AttributeEntities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AttributeEntityValidators_Validators_ValidatorId",
+                        column: x => x.ValidatorId,
+                        principalTable: "Validators",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    EntityId = table.Column<int>(type: "int", nullable: false),
+                    AttributeEntityId = table.Column<int>(type: "int", nullable: false),
+                    Value = table.Column<string>(type: "longtext", nullable: false),
+                    Group = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_AttributeEntities_AttributeEntityId",
+                        column: x => x.AttributeEntityId,
+                        principalTable: "AttributeEntities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_Entities_EntityId",
+                        column: x => x.EntityId,
+                        principalTable: "Entities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AttributeEntityValidatorClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Key = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Value = table.Column<string>(type: "longtext", nullable: false),
+                    AttributeEntityValidationId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AttributeEntityValidatorClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AttributeEntityValidatorClaims_AttributeEntityValidators_Att~",
+                        column: x => x.AttributeEntityValidationId,
+                        principalTable: "AttributeEntityValidators",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AttributeEntities_AttributeId_EntityId",
                 table: "AttributeEntities",
@@ -194,6 +272,27 @@ namespace Tisa.Store.Web.Data.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AttributeEntityValidatorClaims_AttributeEntityValidationId_K~",
+                table: "AttributeEntityValidatorClaims",
+                columns: new[] { "AttributeEntityValidationId", "Key" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AttributeEntityValidatorClaims_Id",
+                table: "AttributeEntityValidatorClaims",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AttributeEntityValidators_AttributeEntityId",
+                table: "AttributeEntityValidators",
+                column: "AttributeEntityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AttributeEntityValidators_ValidatorId",
+                table: "AttributeEntityValidators",
+                column: "ValidatorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Attributes_TypeId",
                 table: "Attributes",
                 column: "TypeId");
@@ -202,6 +301,17 @@ namespace Tisa.Store.Web.Data.Migrations
                 name: "IX_Entities_Name",
                 table: "Entities",
                 column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_AttributeEntityId",
+                table: "Products",
+                column: "AttributeEntityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_EntityId_AttributeEntityId_Group",
+                table: "Products",
+                columns: new[] { "EntityId", "AttributeEntityId", "Group" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -248,7 +358,10 @@ namespace Tisa.Store.Web.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AttributeEntities");
+                name: "AttributeEntityValidatorClaims");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "TypeValidatorClaims");
@@ -257,19 +370,25 @@ namespace Tisa.Store.Web.Data.Migrations
                 name: "ValidatorClaims");
 
             migrationBuilder.DropTable(
+                name: "AttributeEntityValidators");
+
+            migrationBuilder.DropTable(
+                name: "TypeValidators");
+
+            migrationBuilder.DropTable(
+                name: "AttributeEntities");
+
+            migrationBuilder.DropTable(
+                name: "Validators");
+
+            migrationBuilder.DropTable(
                 name: "Attributes");
 
             migrationBuilder.DropTable(
                 name: "Entities");
 
             migrationBuilder.DropTable(
-                name: "TypeValidators");
-
-            migrationBuilder.DropTable(
                 name: "Types");
-
-            migrationBuilder.DropTable(
-                name: "Validators");
         }
     }
 }

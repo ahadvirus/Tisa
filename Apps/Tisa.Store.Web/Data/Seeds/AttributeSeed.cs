@@ -27,7 +27,7 @@ public class AttributeSeed : ISeed<ApplicationContext>
                 await context.Attributes.AddAsync(new Models.Entities.Attribute()
                 {
                     Name = nameof(Models.Entities.Attribute.Id),
-                    Discription = nameof(Models.Entities.Attribute.Id),
+                    Description = "Primary key in entity",
                     TypeId = typeId
                 });
 

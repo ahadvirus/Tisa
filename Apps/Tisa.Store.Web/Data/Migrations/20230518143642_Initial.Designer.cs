@@ -10,7 +10,7 @@ using Tisa.Store.Web.Data.Contexts;
 namespace Tisa.Store.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230501184215_Initial")]
+    [Migration("20230518143642_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,7 +27,7 @@ namespace Tisa.Store.Web.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Discription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -69,6 +69,54 @@ namespace Tisa.Store.Web.Data.Migrations
                     b.ToTable("AttributeEntities");
                 });
 
+            modelBuilder.Entity("Tisa.Store.Web.Models.Entities.AttributeEntityValidator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AttributeEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ValidatorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttributeEntityId");
+
+                    b.HasIndex("ValidatorId");
+
+                    b.ToTable("AttributeEntityValidators");
+                });
+
+            modelBuilder.Entity("Tisa.Store.Web.Models.Entities.AttributeEntityValidatorClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AttributeEntityValidationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("AttributeEntityValidationId", "Key")
+                        .IsUnique();
+
+                    b.ToTable("AttributeEntityValidatorClaims");
+                });
+
             modelBuilder.Entity("Tisa.Store.Web.Models.Entities.Entity", b =>
                 {
                     b.Property<int>("Id")
@@ -85,6 +133,35 @@ namespace Tisa.Store.Web.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Entities");
+                });
+
+            modelBuilder.Entity("Tisa.Store.Web.Models.Entities.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AttributeEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Group")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttributeEntityId");
+
+                    b.HasIndex("EntityId", "AttributeEntityId", "Group")
+                        .IsUnique();
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Tisa.Store.Web.Models.Entities.Type", b =>
@@ -230,6 +307,55 @@ namespace Tisa.Store.Web.Data.Migrations
                     b.Navigation("Entity");
                 });
 
+            modelBuilder.Entity("Tisa.Store.Web.Models.Entities.AttributeEntityValidator", b =>
+                {
+                    b.HasOne("Tisa.Store.Web.Models.Entities.AttributeEntity", "AttributeEntity")
+                        .WithMany("Validators")
+                        .HasForeignKey("AttributeEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tisa.Store.Web.Models.Entities.Validator", "Validator")
+                        .WithMany("Attributes")
+                        .HasForeignKey("ValidatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AttributeEntity");
+
+                    b.Navigation("Validator");
+                });
+
+            modelBuilder.Entity("Tisa.Store.Web.Models.Entities.AttributeEntityValidatorClaim", b =>
+                {
+                    b.HasOne("Tisa.Store.Web.Models.Entities.AttributeEntityValidator", "AttributeEntityValidation")
+                        .WithMany("Claims")
+                        .HasForeignKey("AttributeEntityValidationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AttributeEntityValidation");
+                });
+
+            modelBuilder.Entity("Tisa.Store.Web.Models.Entities.Product", b =>
+                {
+                    b.HasOne("Tisa.Store.Web.Models.Entities.AttributeEntity", "AttributeEntity")
+                        .WithMany("Values")
+                        .HasForeignKey("AttributeEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tisa.Store.Web.Models.Entities.Entity", "Entity")
+                        .WithMany("Products")
+                        .HasForeignKey("EntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AttributeEntity");
+
+                    b.Navigation("Entity");
+                });
+
             modelBuilder.Entity("Tisa.Store.Web.Models.Entities.TypeValidator", b =>
                 {
                     b.HasOne("Tisa.Store.Web.Models.Entities.Type", "Type")
@@ -276,9 +402,23 @@ namespace Tisa.Store.Web.Data.Migrations
                     b.Navigation("Entites");
                 });
 
+            modelBuilder.Entity("Tisa.Store.Web.Models.Entities.AttributeEntity", b =>
+                {
+                    b.Navigation("Validators");
+
+                    b.Navigation("Values");
+                });
+
+            modelBuilder.Entity("Tisa.Store.Web.Models.Entities.AttributeEntityValidator", b =>
+                {
+                    b.Navigation("Claims");
+                });
+
             modelBuilder.Entity("Tisa.Store.Web.Models.Entities.Entity", b =>
                 {
                     b.Navigation("Attributes");
+
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Tisa.Store.Web.Models.Entities.Type", b =>
@@ -295,6 +435,8 @@ namespace Tisa.Store.Web.Data.Migrations
 
             modelBuilder.Entity("Tisa.Store.Web.Models.Entities.Validator", b =>
                 {
+                    b.Navigation("Attributes");
+
                     b.Navigation("Claims");
 
                     b.Navigation("Types");
