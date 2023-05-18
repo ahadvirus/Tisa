@@ -163,16 +163,6 @@ public class TypeRepository : ITypeRepository
         return entry;
     }
 
-    public Task<bool> Delete(Models.DataTransfers.TypeDto entity)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task<bool> Delete(int primary)
-    {
-        throw new System.NotImplementedException();
-    }
-
     /// <summary>
     /// Checking type exist in both side
     /// </summary>
