@@ -31,6 +31,9 @@ public class TypeRepository : ITypeRepository
     /// </summary>
     private IApiTypeRepository ApiSet { get; }
 
+    /// <summary>
+    /// Localization error to persian
+    /// </summary>
     protected IStringLocalizer<TypeRepository> Localizer { get; }
 
     public TypeRepository(ApplicationContext context, ApiContext api, IStringLocalizer<TypeRepository> localizer)
@@ -48,9 +51,9 @@ public class TypeRepository : ITypeRepository
     /// </summary>
     /// <param name="predicate">For customize list before return</param>
     /// <returns></returns>
-    public async Task<IEnumerable<Models.DataTransfers.TypeDto>> Get(System.Func<Models.DataTransfers.TypeDto, bool>? predicate = null)
+    public async Task<IEnumerable<Models.DataTransfers.TypeDto>> GetAsync(System.Func<Models.DataTransfers.TypeDto, bool>? predicate = null)
     {
-        IEnumerable<Models.DataTransfers.Api.TypeDto> types = await ApiSet.Get();
+        IEnumerable<Models.DataTransfers.Api.TypeDto> types = await ApiSet.GetASync();
 
         IEnumerable<Models.DataTransfers.TypeDto> result = await Set
             .Where(type => types.Select(api => api.Id).Contains(type.TypeId))
@@ -74,10 +77,10 @@ public class TypeRepository : ITypeRepository
     /// <param name="primary"><see cref="int"/>Primary key in database</param>
     /// <returns><see cref="Models.DataTransfers.TypeDto"/></returns>
     /// <exception cref="System.Exception">Happened when send wrong Id (Primary key)</exception>
-    public async Task<Models.DataTransfers.TypeDto> Get(int primary)
+    public async Task<Models.DataTransfers.TypeDto> GetAsync(int primary)
     {
 
-        if (!await Exist(primary))
+        if (!await ExistAsync(primary))
         {
             throw new System.Exception(message: Localizer["InvalidType"]);
         }
@@ -92,7 +95,7 @@ public class TypeRepository : ITypeRepository
             })
             .FirstAsync();
 
-        Models.DataTransfers.Api.TypeDto? dto = await ApiSet.Get(id: result.TypeId);
+        Models.DataTransfers.Api.TypeDto? dto = await ApiSet.GetAsync(id: result.TypeId);
 
         return result with { Name = dto?.Name ?? string.Empty };
     }
@@ -103,19 +106,19 @@ public class TypeRepository : ITypeRepository
     /// <param name="entry"><see cref="Models.DataTransfers.TypeDto"/></param>
     /// <returns><see cref="Models.DataTransfers.TypeDto"/></returns>
     /// <exception cref="System.Exception">When throw the exception send invalid TypeId or exist TypeId</exception>
-    public async Task<Models.DataTransfers.TypeDto> Add(Models.DataTransfers.TypeDto entry)
+    public async Task<Models.DataTransfers.TypeDto> AddAsync(Models.DataTransfers.TypeDto entry)
     {
-        if (!await Exist(id: entry.Id))
+        if (!await ExistAsync(id: entry.Id))
         {
             throw new System.Exception(message: Localizer["InvalidType"]);
         }
 
-        if (await Valid(id: entry.Id, type: entry.TypeId))
+        if (await ValidAsync(id: entry.Id, type: entry.TypeId))
         {
             throw new System.Exception(message: Localizer["ExistType"]);
         }
 
-        Models.DataTransfers.Api.TypeDto? dto = await ApiSet.Get(id: entry.TypeId);
+        Models.DataTransfers.Api.TypeDto? dto = await ApiSet.GetAsync(id: entry.TypeId);
 
         Models.Entities.Type entity = new Models.Entities.Type()
         {
@@ -139,9 +142,9 @@ public class TypeRepository : ITypeRepository
     /// <param name="entry"><see cref="Models.DataTransfers.TypeDto"/></param>
     /// <returns><see cref="Models.DataTransfers.TypeDto"/></returns>
     /// <exception cref="System.Exception">When throw the entry is invalid in both side</exception>
-    public async Task<Models.DataTransfers.TypeDto> Update(Models.DataTransfers.TypeDto entry)
+    public async Task<Models.DataTransfers.TypeDto> UpdateAsync(Models.DataTransfers.TypeDto entry)
     {
-        if (!await Valid(id: entry.Id, type: entry.TypeId))
+        if (!await ValidAsync(id: entry.Id, type: entry.TypeId))
         {
             throw new System.Exception(message: Localizer["InvalidType"]);
         }
@@ -168,10 +171,10 @@ public class TypeRepository : ITypeRepository
     /// </summary>
     /// <param name="id"><see cref="int"/>Primary key of type in local database</param>
     /// <returns><see cref="bool"/></returns>
-    public async Task<bool> Exist(int id)
+    public async Task<bool> ExistAsync(int id)
     {
         int result = await Set.Where(type => type.Id == id).Select(type => type.TypeId).FirstOrDefaultAsync();
-        return result != 0 && await ApiSet.Get(result) != null;
+        return result != 0 && await ApiSet.GetAsync(result) != null;
     }
 
     /// <summary>
@@ -180,9 +183,9 @@ public class TypeRepository : ITypeRepository
     /// <param name="id"><see cref="int"/>Primary key of type in local database</param>
     /// <param name="type"><see cref="int"/>Index key of type in local database</param>
     /// <returns><see cref="bool"/></returns>
-    public async Task<bool> Valid(int id, int type)
+    public async Task<bool> ValidAsync(int id, int type)
     {
-        return await Exist(id) && await Set
+        return await ExistAsync(id) && await Set
             .Where(model => model.Id == id && model.TypeId == type)
             .Select(model => model.Id)
             .AnyAsync();
