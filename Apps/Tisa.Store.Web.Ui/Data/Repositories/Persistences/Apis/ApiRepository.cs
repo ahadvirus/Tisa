@@ -35,7 +35,6 @@ public class ApiRepository : IApiRepository
     {
         Option = option;
     }
-
     public Task<HttpClient> ClientAsync()
     {
         return Task.FromResult(new HttpClient() { BaseAddress = new Uri(Option.Address) });
