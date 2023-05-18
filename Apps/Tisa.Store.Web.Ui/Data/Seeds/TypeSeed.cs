@@ -22,13 +22,13 @@ public class TypeSeed : ISeed<ITypeRepository>
 
     public async Task Invoke(ITypeRepository repository)
     {
-        IEnumerable<Models.DataTransfers.TypeDto> types = await repository.Get();
+        IEnumerable<Models.DataTransfers.TypeDto> types = await repository.GetAsync();
 
-        foreach (Models.DataTransfers.Api.TypeDto type in (await Api.Get()).Where(type => !types.Select(dto => dto.TypeId).Contains(type.Id)))
+        foreach (Models.DataTransfers.Api.TypeDto type in (await Api.GetASync()).Where(type => !types.Select(dto => dto.TypeId).Contains(type.Id)))
         {
             try
             {
-                await repository.Add(entry: new Models.DataTransfers.TypeDto() { Name = type.Name, TypeId = type.Id });
+                await repository.AddAsync(entry: new Models.DataTransfers.TypeDto() { Name = type.Name, TypeId = type.Id });
             }
             catch (Exception e)
             {

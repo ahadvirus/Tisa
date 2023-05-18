@@ -24,7 +24,7 @@ public class ApiTypeRepository : ApiRepository, IApiTypeRepository
     {
     }
 
-    public async Task<IEnumerable<TypeDto>> Get(Func<TypeDto, bool>? predicate = null)
+    public async Task<IEnumerable<TypeDto>> GetASync(Func<TypeDto, bool>? predicate = null)
     {
         IEnumerable<TypeDto> result = new TypeDto[] { };
 
@@ -52,7 +52,7 @@ public class ApiTypeRepository : ApiRepository, IApiTypeRepository
         return result;
     }
 
-    public async Task<TypeDto?> Get(int id)
+    public async Task<TypeDto?> GetAsync(int id)
     {
         TypeDto? result = null;
 

@@ -17,7 +17,7 @@ public class TypesController : Controller
     // GET
     public async Task<IActionResult> Index()
     {
-        return View(await Repository.Get());
+        return View(await Repository.GetAsync());
     }
 
     // GET
@@ -34,7 +34,7 @@ public class TypesController : Controller
             try
             {
 
-                Models.DataTransfers.TypeDto dto = await Repository.Get((int)id);
+                Models.DataTransfers.TypeDto dto = await Repository.GetAsync((int)id);
                 result = View(dto);
             }
             catch (Exception e)
@@ -69,7 +69,7 @@ public class TypesController : Controller
             {
                 try
                 {
-                    await Repository.Update(entry);
+                    await Repository.UpdateAsync(entry);
                     result = RedirectToAction(actionName: nameof(Index));
                 }
                 catch (Exception e)

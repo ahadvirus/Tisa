@@ -12,12 +12,12 @@ public interface IApiTypeRepository : IApiRepository
     /// </summary>
     /// <param name="predicate"><see cref="Func{T, TResult}"/> Predicate before get list</param>
     /// <returns></returns>
-    Task<IEnumerable<TypeDto>> Get(Func<TypeDto, bool>?  predicate = null);
+    Task<IEnumerable<TypeDto>> GetASync(Func<TypeDto, bool>?  predicate = null);
 
     /// <summary>
     /// Return specific type exist in api
     /// </summary>
     /// <param name="id"><see cref="int"/> The type you trying to get it</param>
     /// <returns><see cref="Nullable{TypeDto}"/>Return null if send wrong id</returns>
-    Task<TypeDto?> Get(int  id);
+    Task<TypeDto?> GetAsync(int  id);
 }
