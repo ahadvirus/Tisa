@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -34,5 +37,25 @@ public class IndexController : ControllerBase
             .ToListAsync(cancellation);
     }
 
-    
+
+    [HttpGet(template: "{" + nameof(id) + ":int}")]
+    public async Task<ActionResult<IndexVM>> Invoke([FromRoute]int id, CancellationToken cancellation)
+    {
+        Expression<Func<Models.Entities.Attribute, bool>> predicate = attribute => attribute.Id == id;
+
+        if (!await Context.Attributes
+                .Where(predicate: predicate)
+                .Select(selector: attribute => attribute.Id)
+                .AnyAsync(cancellationToken: cancellation))
+        {
+            return BadRequest();
+        }
+
+        return Ok(await Context.Attributes
+            .Where(predicate: predicate)
+            .Include(attribute => attribute.Type)
+            .ProjectTo<IndexVM>(Mapper.ConfigurationProvider)
+            .FirstAsync(cancellation));
+    }
+
 }
