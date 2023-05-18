@@ -14,5 +14,9 @@ public class TypeConfiguration : IEntityTypeConfiguration<Models.Entities.Type>
 
         builder.Property(propertyExpression: type => type.Name)
             .IsRequired();
+
+        builder.HasMany(navigationExpression: type => type.Attributes)
+            .WithOne(navigationExpression: attribute => attribute.Type)
+            .HasForeignKey(foreignKeyExpression: attribute => attribute.TypeId);
     }
 }
