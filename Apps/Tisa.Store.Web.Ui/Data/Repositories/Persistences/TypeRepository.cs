@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Tisa.Store.Web.Ui.Data.Contexts;
@@ -9,23 +10,8 @@ using Tisa.Store.Web.Ui.Data.Repositories.Contracts.Apis;
 
 namespace Tisa.Store.Web.Ui.Data.Repositories.Persistences;
 
-public class TypeRepository : ITypeRepository
+public class TypeRepository : AbstractRepository<Models.Entities.Type, int>, ITypeRepository
 {
-    /// <summary>
-    /// Local Database
-    /// </summary>
-    protected ApplicationContext Context { get; }
-
-    /// <summary>
-    /// Local Table
-    /// </summary>
-    protected DbSet<Models.Entities.Type> Set { get; }
-
-    /// <summary>
-    /// Access to Web Api
-    /// </summary>
-    protected ApiContext Api { get; }
-
     /// <summary>
     /// Access to Type in Api
     /// </summary>
@@ -36,14 +22,11 @@ public class TypeRepository : ITypeRepository
     /// </summary>
     protected IStringLocalizer<TypeRepository> Localizer { get; }
 
-    public TypeRepository(ApplicationContext context, ApiContext api, IStringLocalizer<TypeRepository> localizer)
+    public TypeRepository(ApplicationContext context, ApiContext api, IStringLocalizer<TypeRepository> localizer) : base(context: context, apiContext: api)
     {
-        Context = context;
-        Api = api;
         Localizer = localizer;
-
-        Set = context.Set<Models.Entities.Type>();
-        ApiSet = Api.Types;
+        
+        ApiSet = ApiContext.Types;
     }
 
     /// <summary>
@@ -108,12 +91,12 @@ public class TypeRepository : ITypeRepository
     /// <exception cref="System.Exception">When throw the exception send invalid TypeId or exist TypeId</exception>
     public async Task<Models.DataTransfers.TypeDto> AddAsync(Models.DataTransfers.TypeDto entry)
     {
-        if (!await ExistAsync(id: entry.Id))
+        if (!await ValidateAsync(type: entry.TypeId))
         {
             throw new System.Exception(message: Localizer["InvalidType"]);
         }
 
-        if (await ValidAsync(id: entry.Id, type: entry.TypeId))
+        if (await Registered(type: entry.TypeId))
         {
             throw new System.Exception(message: Localizer["ExistType"]);
         }
@@ -133,7 +116,7 @@ public class TypeRepository : ITypeRepository
             throw new System.Exception(message: Localizer["SomethingWrongHappened"]);
         }
 
-        return entry with { Id = entry.Id, Name = dto.Name };
+        return entry with { Id = entry.Id, Name = dto?.Name ?? string.Empty };
     }
 
     /// <summary>
@@ -174,7 +157,7 @@ public class TypeRepository : ITypeRepository
     public async Task<bool> ExistAsync(int id)
     {
         int result = await Set.Where(type => type.Id == id).Select(type => type.TypeId).FirstOrDefaultAsync();
-        return result != 0 && await ApiSet.GetAsync(result) != null;
+        return result != 0 && await ValidateAsync(result);
     }
 
     /// <summary>
@@ -189,5 +172,33 @@ public class TypeRepository : ITypeRepository
             .Where(model => model.Id == id && model.TypeId == type)
             .Select(model => model.Id)
             .AnyAsync();
+    }
+
+    /// <summary>
+    /// Checking type validate in api side
+    /// </summary>
+    /// <param name="type"><see cref="int"/> The id (primary key) of type</param>
+    /// <returns><see cref="bool"/></returns>
+    protected async Task<bool> ValidateAsync(int type)
+    {
+        return await ApiSet.GetAsync(id: type) != null;
+    }
+
+    /// <summary>
+    /// Checking type was add in local database
+    /// </summary>
+    /// <param name="type"><see cref="int"/> The id (primary key) of the type</param>
+    /// <returns><see cref="bool"/></returns>
+    protected async Task<bool> Registered(int type)
+    {
+        return await ValidateAsync(type: type) && await Set
+            .Where(predicate: entity => entity.TypeId == type)
+            .Select(selector: entity => entity.Id)
+            .AnyAsync();
+    }
+
+    protected override void MapperConfiguration(IMapperConfigurationExpression configuration)
+    {
+        
     }
 }

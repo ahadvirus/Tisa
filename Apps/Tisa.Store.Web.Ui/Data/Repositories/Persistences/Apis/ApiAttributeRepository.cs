@@ -64,7 +64,7 @@ public class ApiAttributeRepository : ApiRepository, IApiAttributeRepository
             using (HttpResponseMessage message = await client.GetAsync(requestUri:
                        string.Format(
                            format: "{0}/{1}",
-                           args: new object?[] { Address }
+                           args: new object?[] { Address, id }
                            )
                        )
                    )
@@ -87,14 +87,17 @@ public class ApiAttributeRepository : ApiRepository, IApiAttributeRepository
         {
             await JsonSerializer.SerializeAsync(utf8Json: stream, value: entry, options: JsonOptions);
 
-            using (StreamReader reader = new StreamReader(stream))
+            using (StreamReader reader = new StreamReader(stream: stream, encoding: Encoding.UTF8))
             {
                 using (HttpClient client = await ClientAsync())
                 {
+                    string json = await reader.ReadToEndAsync();
+                    await LogAsync(response: json);
+
                     using (HttpResponseMessage message = await client.PostAsync(
                                requestUri: Address,
                                content: new StringContent(
-                                   content: await reader.ReadToEndAsync(),
+                                   content: json,
                                    encoding: Encoding.UTF8,
                                    mediaType: JsonMediaType
                                )

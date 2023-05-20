@@ -16,8 +16,8 @@ public interface IApiAttributeRepository : IApiRepository
     /// <summary>
     /// Return only one specific attribute exist in api
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id"><see cref="int"/></param>
+    /// <returns><see cref="Nullable{T}"/></returns>
     Task<Models.DataTransfers.Api.AttributeDto?> GetAsync(int id);
 
     /// <summary>
@@ -25,6 +25,7 @@ public interface IApiAttributeRepository : IApiRepository
     /// </summary>
     /// <param name="entry"><see cref="Models.DataTransfers.Api.AttributeDto"/>The new attribute try to add</param>
     /// <returns><see cref="Models.DataTransfers.Api.AttributeDto"/> Return the attribute with the Id in api side</returns>
+    /// <exception cref="System.Exception"></exception>
     Task<Models.DataTransfers.Api.AttributeDto> AddAsync(Models.DataTransfers.Api.AttributeDto entry);
 
     /// <summary>
