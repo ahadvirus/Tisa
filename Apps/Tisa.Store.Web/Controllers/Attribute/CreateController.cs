@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -26,21 +29,21 @@ public class CreateController : ControllerBase
         Validator = new InlineValidator<Models.ViewModels.Attributes.CreateVM>()
         {
             validator => validator.RuleFor(expression: vm => vm.Title)
-                .NotNull(),
+                .NotEmpty(),
             validator => validator.RuleFor(expression: vm => vm.Description)
-                .NotNull(),
+                .NotEmpty(),
             validator => validator.RuleFor(expression: vm => vm.Type)
-                .NotNull()
+                .NotEmpty()
         };
-        
+
         Context = context;
         Mapper = mapper;
     }
-    
+
     // GET
     [HttpPost]
     public async Task<ActionResult<Models.ViewModels.Attributes.IndexVM>> Invoke(
-        [FromBody]Models.ViewModels.Attributes.CreateVM entry,
+        [Bind(include: new string[]{nameof(Models.ViewModels.Attributes.CreateVM.Title), nameof(Models.ViewModels.Attributes.CreateVM.Description), nameof(Models.ViewModels.Attributes.CreateVM.Type)})] Models.ViewModels.Attributes.CreateVM entry,
         CancellationToken cancellation
     )
     {
@@ -53,27 +56,34 @@ public class CreateController : ControllerBase
                 ModelState.AddModelError(
                     key: failure.PropertyName,
                     errorMessage: failure.ErrorMessage
-                    );
+                );
             }
 
             return BadRequest(ModelState);
         }
-        
-        Models.Entities.Type? type = await Context.Types.Where(type => type.Name == entry.Type)
+
+        Expression<Func<Models.Entities.Type, bool>> predicate = Regex.IsMatch(input: entry.Type, pattern: "^\\d+$")
+            ? type => type.Id == int.Parse(entry.Type)
+            : type => type.Name == entry.Type;
+
+        Models.Entities.Type? type = await Context.Types.Where(predicate: predicate)
             .FirstOrDefaultAsync(cancellation);
 
         if (type == null)
         {
             ModelState.AddModelError(
-                nameof(Models.ViewModels.Attributes.CreateVM.Type),  
-                string.Format("Please send valid `{0}`", nameof(Models.ViewModels.Attributes.CreateVM.Type))
+                key: nameof(Models.ViewModels.Attributes.CreateVM.Type),
+                errorMessage: string.Format(
+                    format: "Please send valid `{0}`",
+                    args: new object[] { nameof(Models.ViewModels.Attributes.CreateVM.Type) }
+                )
             );
 
             return BadRequest(ModelState);
         }
 
         Models.Entities.Attribute attribute = Mapper.Map<Models.Entities.Attribute>(entry);
-        
+
         attribute.TypeId = type.Id;
 
         await Context.Attributes.AddAsync(attribute, cancellation);
@@ -81,8 +91,7 @@ public class CreateController : ControllerBase
         await Context.SaveChangesAsync(cancellation);
 
         attribute.Type = type;
-        
-        return Ok(Mapper.Map<Models.ViewModels.Attributes.IndexVM>(attribute));
 
+        return Ok(Mapper.Map<Models.ViewModels.Attributes.IndexVM>(attribute));
     }
 }
