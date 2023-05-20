@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.5.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
@@ -21,9 +23,9 @@
     <Folder Include="Data\Configurations\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Data\Seeds\" />
-    <Folder Include="Data\Repositories\Contracts\Apis\" />
     <Folder Include="Data\Repositories\Persistences\Apis\" />
     <Folder Include="Infrastructures\Middlewares\" />
+    <Folder Include="Models\ViewModels\Attributes\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Attributes\Create.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Attributes\Create.cshtml" />
   </ItemGroup>
 
 </Project>

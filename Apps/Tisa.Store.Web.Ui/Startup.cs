@@ -35,7 +35,11 @@ public static class Startup
 
         services.AddScoped<IApiTypeRepository, ApiTypeRepository>();
 
+        services.AddScoped<IApiAttributeRepository, ApiAttributeRepository>();
+
         services.AddScoped<ITypeRepository, TypeRepository>();
+
+        services.AddScoped<IAttributeRepository, AttributeRepository>();
 
         services.Configure<RequestLocalizationOptions>(configureOptions: LocalizationOption);
 
@@ -90,6 +94,8 @@ public static class Startup
         app.UseRequestCulture();
 
         app.UseHttpsRedirection();
+
+        app.UseServiceExtension();
 
         app.UseStaticFiles();
 
