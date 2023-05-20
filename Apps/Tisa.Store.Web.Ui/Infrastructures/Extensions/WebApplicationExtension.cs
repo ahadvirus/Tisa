@@ -10,4 +10,10 @@ public static class WebApplicationExtension
     {
         return builder.UseMiddleware<RequestCultureMiddleware>();
     }
+
+    public static IApplicationBuilder UseServiceExtension(
+        this IApplicationBuilder builder)
+    {
+        return builder.UseMiddleware<ServiceProviderMiddleware>();
+    }
 }
