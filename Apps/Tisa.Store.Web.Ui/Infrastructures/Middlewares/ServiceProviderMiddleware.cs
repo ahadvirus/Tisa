@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Reflection;
@@ -27,7 +28,30 @@ public class ServiceProviderMiddleware
 
             if (method != null)
             {
-                method.Invoke(obj: null, parameters: new object?[] { provider });
+                List<object?> parameters = new List<object?>();
+                
+                foreach (ParameterInfo parameter in method.GetParameters())
+                {
+                    if (parameter.ParameterType == typeof(IServiceProvider))
+                    {
+                        parameters.Add(provider);
+                    }
+                    else
+                    {
+                        object? service = provider.GetService(parameter.ParameterType);
+
+                        if (service != null)
+                        {
+                            parameters.Add(service);
+                        }
+                    }
+                }
+
+                if (parameters.Count == method.GetParameters().Length)
+                {
+                    method.Invoke(obj: null, parameters: parameters.ToArray());
+                }
+                
             }
         }
 
