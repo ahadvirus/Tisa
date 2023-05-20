@@ -13,7 +13,9 @@ using Tisa.Store.Web.Ui.Data.Repositories.Contracts.Apis;
 using Tisa.Store.Web.Ui.Data.Repositories.Persistences;
 using Tisa.Store.Web.Ui.Data.Repositories.Persistences.Apis;
 using Tisa.Store.Web.Ui.Infrastructures.Configurations;
+using Tisa.Store.Web.Ui.Infrastructures.Contracts;
 using Tisa.Store.Web.Ui.Infrastructures.Extensions;
+using Tisa.Store.Web.Ui.Infrastructures.Helpers;
 
 namespace Tisa.Store.Web.Ui;
 
@@ -40,6 +42,8 @@ public static class Startup
         services.AddScoped<ITypeRepository, TypeRepository>();
 
         services.AddScoped<IAttributeRepository, AttributeRepository>();
+
+        services.AddScoped<IPageRenderer, PageRenderer>();
 
         services.Configure<RequestLocalizationOptions>(configureOptions: LocalizationOption);
 
