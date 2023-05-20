@@ -12,7 +12,7 @@ public record ResponseVm<T> : IEnumerable<T>
         Results = results;
     }
 
-    [Display]
+    [Display(Name = nameof(Query))]
     public string Query { get; init; }
 
     private IEnumerable<T> Results { get; init; }

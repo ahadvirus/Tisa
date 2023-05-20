@@ -60,10 +60,10 @@
 
                     <li class="flex flex-col sm:flex-row bg-gray-50 text-gray-900">
                         <a class="sm:w-4/12 w-100 px-6 py-3 text-sm font-semibold text-right">
-                            @Html.DisplayNameSearchFor(expression: model => model.Id)
+                            @(await Html.DisplayNameSearchFor(expression: model => model.Id))
                         </a>
                         <a class="sm:w-8/12 mt-2 sm:mt-0 w-100 px-6 py-3 text-sm font-semibold text-right">
-                            @Html.DisplayNameSearchFor(expression: model => model.Display)
+                            @(await Html.DisplayNameSearchFor(expression: model => model.Display))
                         </a>
 
                     </li>
