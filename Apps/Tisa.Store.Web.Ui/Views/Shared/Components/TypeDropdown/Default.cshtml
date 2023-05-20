@@ -1,0 +1,51 @@
+﻿@model Models.ViewModels.ViewComponents.TypeDropdownVm
+
+@{
+    IDictionary<string, object> htmlAttributes = new Dictionary<string, object>(
+        collection: new KeyValuePair<string, object>[]
+        {
+            new KeyValuePair<string, object>(key: "x-bind:value", value: "selectedIndex + 1")
+        });
+
+    string alpineData = string.Join(
+        separator: ", ",
+        values: Model.Select(selector: item => string.Format(
+            format: "{{&quot;id&quot;:{0},&quot;name&quot;:&quot;{1}&quot;}}",
+            args: new object?[] { (item.Key - 1), item.Value }
+            ))
+        );
+}
+
+<div class="sm:col-span-2">
+    <div x-data="Components.listbox({ modelName: 'selected', open: false, selectedIndex: @Html.Raw(Model.Selected), activeIndex: @Html.Raw(value: Model.Selected), items: [@Html.Raw(value: alpineData)] })" x-init="init()">
+        @Html.Hidden(expression: Model.Input, value: Model.Selected, htmlAttributes: htmlAttributes)
+        @Html.Label(expression: Model.Input, labelText: ViewLocalizer["Label"].Value, htmlAttributes: new { id="listbox-label", @class="block text-xl font-medium text-gray-700", click="$refs.button.focus()" })
+        <div class="relative mt-2">
+            <button type="button" class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-3 pr-4 pl-10 text-right shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:text-sm" x-ref="button" @@keydown.arrow-up.stop.prevent="onButtonClick()" @@keydown.arrow-down.stop.prevent="onButtonClick()" @@click="onButtonClick()" aria-haspopup="listbox" :aria-expanded="open" aria-expanded="true" aria-labelledby="listbox-label">
+                <span x-text="selected.name" class="block truncate"></span>
+                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pr-2">
+                    <svg class="h-5 w-5 text-gray-400" x-description="Heroicon name: mini/chevron-up-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd"></path>
+                    </svg>
+                </span>
+            </button>
+
+
+            <ul x-show="open" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm" x-max="1" @@click.away="open = false" x-description="Select popover, show/hide based on select state." @@keydown.enter.stop.prevent="onOptionSelect()" @@keydown.space.stop.prevent="onOptionSelect()" @@keydown.escape="onEscape()" @@keydown.arrow-up.prevent="onArrowUp()" @@keydown.arrow-down.prevent="onArrowDown()" x-ref="listbox" tabindex="-1" role="listbox" aria-labelledby="listbox-label" :aria-activedescendant="activeDescendant" aria-activedescendant="listbox-option-3">
+                @foreach (KeyValuePair<int, string> item in Model)
+                {
+                    <li x-state:on="Highlighted" x-state:off="Not Highlighted" class="text-gray-900 relative cursor-default select-none py-2 pr-3 pl-9" x-description="Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation." id="@Html.Raw(value:string.Format(format:"listbox-option-{0}", args: new object?[]{ item.Key - 1 }))" role="option" @@click="choose(@Html.Raw(item.Key - 1))" @@mouseenter="onMouseEnter($event)" @@mousemove="onMouseMove($event, @Html.Raw(item.Key - 1))" @@mouseleave="onMouseLeave($event)" :class="{ 'text-white bg-teal-500': activeIndex === @Html.Raw(item.Key - 1), 'text-gray-900': !(activeIndex === @Html.Raw(item.Key - 1)) }">
+                        <span x-state:on="Selected" x-state:off="Not Selected" class="font-normal block truncate" :class="{ 'font-semibold': selectedIndex === @Html.Raw(item.Key - 1), 'font-normal': !(selectedIndex === @Html.Raw(item.Key - 1)) }">@Html.Raw(item.Value)</span>
+
+                        <span x-description="Checkmark, only display for selected option." x-state:on="Highlighted" x-state:off="Not Highlighted" class="text-teal-500 absolute inset-y-0 left-0 flex items-center pl-4" :class="{ 'text-white': activeIndex === @Html.Raw(item.Key - 1), 'text-teal-500': !(activeIndex === @Html.Raw(item.Key - 1)) }" x-show="selectedIndex === @Html.Raw(item.Key - 1)">
+                            <svg class="h-5 w-5" x-description="Heroicon name: mini/check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"></path>
+                            </svg>
+                        </span>
+                    </li>
+                }
+            </ul>
+
+        </div>
+    </div>
+</div>
