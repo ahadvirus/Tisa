@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Tisa.Store.Web.Infrastructures.Attributes;
+using Tisa.Store.Web.Ui.Infrastructures.Attributes;
 using Tisa.Store.Web.Ui.Infrastructures.Contracts;
 
 namespace Tisa.Store.Web.Ui.Infrastructures.Extensions;

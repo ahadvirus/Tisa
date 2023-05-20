@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tisa.Store.Web.Infrastructures.Attributes;
+namespace Tisa.Store.Web.Ui.Infrastructures.Attributes;
 
 public class OrderAttribute : Attribute
 {
