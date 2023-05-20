@@ -1,0 +1,58 @@
+﻿@model Models.ViewModels.Attributes.CreateVm
+
+@{
+    ViewData[nameof(View.Title)] = ViewLocalizer[name: nameof(View.Title)];
+}
+
+<!-- Page header -->
+<div class="bg-white shadow">
+    <div class="px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
+        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+            <div class="min-w-0 flex-1">
+                <!-- Profile -->
+                <div class="flex items-center">
+                    <div>
+                        <div class="flex items-center">
+                            <h1 class="mr-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
+                                @ViewData[nameof(View.Title)]
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-8 flex">
+    <div class="w-11/12 sm:w-10/12 mx-auto bg-white shadow py-10 px-6 sm:px-10 lg:col-span-2 xl:p-12">
+        @using (Html.BeginForm(
+        method: FormMethod.Post,
+        htmlAttributes: new { @class = "mt-6 grid grid-cols-1 gap-4" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="sm:col-span-2">
+                @Html.LabelFor(expression: model => model.Display, htmlAttributes: new { @class = "block text-xl font-medium text-warm-gray-900" })
+                <div class="mt-2">
+                    @Html.TextBoxFor(expression: model => model.Display, htmlAttributes: new { @class = "block w-full rounded-md border-warm-gray-300 py-3 px-4 text-warm-gray-900 shadow-sm focus:border-teal-500 focus:ring-teal-500" })
+                </div>
+            </div>
+
+            <div class="sm:col-span-2">
+                @Html.LabelFor(expression: model => model.Description, htmlAttributes: new { @class = "block text-xl font-medium text-warm-gray-900" })
+                <div class="mt-2">
+                    @Html.TextBoxFor(expression: model => model.Description, htmlAttributes: new { @class = "block w-full rounded-md border-warm-gray-300 py-3 px-4 text-warm-gray-900 shadow-sm focus:border-teal-500 focus:ring-teal-500" })
+                </div>
+            </div>
+
+            @await Component.InvokeAsync(name: nameof(TypeDropdownViewComponent).RemoveViewComponent(), arguments: new { id = Model != null ? Model.Type : 0, input = nameof(Model.Type) } )
+
+            <div class="sm:col-span-2 sm:flex sm:justify-end">
+                <button type="submit" class="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-teal-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:w-auto">
+                    @ViewLocalizer["SubmitButton"]
+                </button>
+            </div>
+        }
+    </div>
+</div>
