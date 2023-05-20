@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Tisa.Store.Web.Ui.Infrastructures.Contracts;
+﻿namespace Tisa.Store.Web.Ui.Infrastructures.Contracts;
 
 public interface IEntity<T> where T : struct
 {
