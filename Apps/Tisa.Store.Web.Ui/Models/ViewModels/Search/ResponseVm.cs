@@ -1,19 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Tisa.Store.Web.Ui.Models.ViewModels.Search;
 
-public record ResponseVm<T> : IEnumerable<T>
+public record ResponseVm<T> : BaseVm, IEnumerable<T>
 {
     public ResponseVm(IEnumerable<T> results)
     {
         Query = string.Empty;
         Results = results;
     }
-
-    [Display(Name = nameof(Query))]
-    public string Query { get; init; }
 
     private IEnumerable<T> Results { get; init; }
 
