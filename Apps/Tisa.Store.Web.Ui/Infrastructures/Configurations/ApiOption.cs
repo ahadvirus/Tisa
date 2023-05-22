@@ -1,11 +1,17 @@
-﻿namespace Tisa.Store.Web.Ui.Infrastructures.Configurations
+﻿namespace Tisa.Store.Web.Ui.Infrastructures.Configurations;
+
+/// <summary>
+/// Class connect to api server 
+/// </summary>
+public record ApiOption
 {
-    public class ApiOption
+    public ApiOption()
     {
-        public ApiOption()
-        {
-            Address = string.Empty;
-        }
-        public string Address { get; set; }
+        Address = string.Empty;
     }
+
+    /// <summary>
+    /// The api address save init
+    /// </summary>
+    public string Address { get; init; }
 }

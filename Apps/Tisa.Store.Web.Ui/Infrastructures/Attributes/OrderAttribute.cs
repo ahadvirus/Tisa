@@ -2,12 +2,18 @@
 
 namespace Tisa.Store.Web.Ui.Infrastructures.Attributes;
 
+/// <summary>
+/// To ordering seed class for execution
+/// </summary>
 public class OrderAttribute : Attribute
 {
-    public OrderAttribute(int number)
+    public OrderAttribute(long version)
     {
-        Number = number;
+        Version = version;
     }
 
-    public int Number { get; }
+    /// <summary>
+    /// Keep date and time of creation of seed
+    /// </summary>
+    public long Version { get; }
 }

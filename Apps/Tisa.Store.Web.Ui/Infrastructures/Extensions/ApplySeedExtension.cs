@@ -63,7 +63,7 @@ public static class ApplySeedExtension
                                ))
                 .Where(type =>
                     type.GetCustomAttributes().Any(attribute => attribute.GetType() == typeof(OrderAttribute)))
-                .OrderBy(type => (type.GetCustomAttribute(typeof(OrderAttribute)) as OrderAttribute)?.Number);
+                .OrderBy(type => (type.GetCustomAttribute(typeof(OrderAttribute)) as OrderAttribute)?.Version);
 
             foreach (Type seed in seeds)
             {

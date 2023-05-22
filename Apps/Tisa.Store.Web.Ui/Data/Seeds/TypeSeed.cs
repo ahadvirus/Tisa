@@ -10,7 +10,7 @@ using Tisa.Store.Web.Ui.Infrastructures.Contracts;
 
 namespace Tisa.Store.Web.Ui.Data.Seeds;
 
-[Order(number: 0)]
+[Order(version: 20230518102820)]
 public class TypeSeed : ISeed<ITypeRepository>
 {
     private IApiTypeRepository Api { get; }

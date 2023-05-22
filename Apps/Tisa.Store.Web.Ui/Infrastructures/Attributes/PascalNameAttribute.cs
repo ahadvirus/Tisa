@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Tisa.Store.Web.Ui.Infrastructures.Attributes;
 
+/// <summary>
+/// Validation attribute for validate the entry is start with capital character
+/// </summary>
 public class PascalNameAttribute : ValidationAttribute
 {
 
