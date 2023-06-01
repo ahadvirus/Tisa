@@ -86,7 +86,7 @@ public class ApiAttributeRepository : ApiRepository, IApiAttributeRepository
         using (MemoryStream stream = new MemoryStream())
         {
             await JsonSerializer.SerializeAsync(utf8Json: stream, value: entry, options: JsonOptions);
-
+            stream.Position = 0;
             using (StreamReader reader = new StreamReader(stream: stream, encoding: Encoding.UTF8))
             {
                 using (HttpClient client = await ClientAsync())
