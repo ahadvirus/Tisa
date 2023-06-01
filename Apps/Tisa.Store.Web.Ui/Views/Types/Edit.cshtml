@@ -1,27 +1,10 @@
 ﻿@model Models.DataTransfers.TypeDto
 @{
-    ViewData[nameof(View.Title)] = ViewLocalizer[name: nameof(View.Title), arguments: new object[]{ Model.Display }];
-}
+    ViewData[index: nameof(View.Title)] = ViewLocalizer[name: nameof(View.Title), arguments: new object[]{ Model.Display }];
 
-<!-- Page header -->
-<div class="bg-white shadow">
-    <div class="px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
-        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
-            <div class="min-w-0 flex-1">
-                <!-- Profile -->
-                <div class="flex items-center">
-                    <div>
-                        <div class="flex items-center">
-                            <h1 class="mr-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
-                                @ViewData[nameof(View.Title)]
-                            </h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    await Html.RenderPartialAsync(partialViewName: "_PageHeader", model: new PageHeader() { Title = ViewData[index: nameof(View.Title)], HaveCreateButton = true, CreateButtonTitle = ViewLocalizer[name: "CreateButton"].Value });
+
+}
 
 <div class="mt-8 flex">
     <div class="w-11/12 sm:w-10/12 mx-auto bg-white shadow py-10 px-6 sm:px-10 lg:col-span-2 xl:p-12">
