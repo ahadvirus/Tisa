@@ -12,12 +12,18 @@ public record CreateVm
         Description = string.Empty;
     }
 
+    /// <summary>
+    /// Save name of property
+    /// </summary>
     [Display(Name = nameof(Display))]
     [Required(ErrorMessage = nameof(Display) + nameof(DataAnnotations.Required) + nameof(RequiredAttribute.ErrorMessage))]
     [RegularExpression(pattern: "^[A-Za-z0-9]+$", ErrorMessage = nameof(Display) + nameof(DataAnnotations.RegularExpression) + nameof(RegularExpressionAttribute.ErrorMessage))]
     [PascalName(ErrorMessage = nameof(Display) + nameof(DataAnnotations.PascalName) + nameof(PascalNameAttribute.ErrorMessage))]
     public string Display { get; init; }
 
+    /// <summary>
+    /// Get description of property
+    /// </summary>
     [Display(Name = nameof(Description))]
     [Required(ErrorMessage = nameof(Description) + nameof(DataAnnotations.Required) + nameof(RequiredAttribute.ErrorMessage))]
     [RegularExpression(pattern: "^[A-Za-z0-9\\s\\'\\\"\\,\\(\\)\\[\\]\\\\_\\-]+$", ErrorMessage = nameof(Display) + nameof(DataAnnotations.RegularExpression) + nameof(RegularExpressionAttribute.ErrorMessage))]
