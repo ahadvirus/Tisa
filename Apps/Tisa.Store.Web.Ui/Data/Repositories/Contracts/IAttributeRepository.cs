@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Tisa.Store.Web.Ui.Infrastructures.Contracts;
 
@@ -12,7 +13,7 @@ public interface IAttributeRepository : IRepository
     /// </summary>
     /// <param name="predicate"> Customize result before return</param>
     /// <returns><see cref="Task{TResult}"/></returns>
-    Task<IEnumerable<Models.DataTransfers.AttributeDto>> GetAsync(Func<Models.DataTransfers.AttributeDto, bool>? predicate = null);
+    Task<IEnumerable<Models.DataTransfers.AttributeDto>> GetAsync(Expression<Func<Models.DataTransfers.AttributeDto, bool>>? predicate = null);
 
     /// <summary>
     /// Get one of attribute if exist in database otherwise null

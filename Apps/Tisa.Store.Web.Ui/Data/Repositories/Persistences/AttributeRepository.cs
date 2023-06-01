@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -30,16 +31,21 @@ public class AttributeRepository : AbstractRepository<Models.Entities.Attribute,
     }
 
 
-    public async Task<IEnumerable<AttributeDto>> GetAsync(Func<AttributeDto, bool>? predicate = null)
+    public async Task<IEnumerable<AttributeDto>> GetAsync(Expression<Func<AttributeDto, bool>>? predicate = null)
     {
         IEnumerable<Models.DataTransfers.Api.AttributeDto> attributes = await ApiSet.GetAsync(predicate: null);
 
-        IEnumerable<AttributeDto> result = await Set
+        IQueryable<AttributeDto> query = Set
             .Where(predicate: attribute => attributes.Select(dto => dto.Id).Contains(attribute.AttributeId))
-            .ProjectTo<AttributeDto>(Mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<AttributeDto>(Mapper.ConfigurationProvider);
 
-        return predicate != null ? result.Where(predicate: predicate) : result;
+
+        if (predicate != null)
+        {
+            query = query.Where(predicate: predicate);
+        }
+
+        return await query.ToListAsync();
     }
 
     public async Task<AttributeDto?> GetAsync(int id)
@@ -109,24 +115,16 @@ public class AttributeRepository : AbstractRepository<Models.Entities.Attribute,
 
     public async Task<AttributeDto> UpdateAsync(AttributeDto entry)
     {
-        if (!await ValidAsync(entry.Id, entry.AttributeId))
+        if (!await ExistAsync(id: entry.Id))
         {
             throw new Exception(message: "ValidAttribute");
         }
 
-        if (!await TypeRepository.ExistAsync(id: entry.TypeId))
-        {
-            throw new Exception(message: "InvalidType");
-        }
+        Models.Entities.Attribute entity = await Set.FirstAsync(predicate: model => model.Id == entry.Id);
 
-        Models.Entities.Attribute entity = new Models.Entities.Attribute()
-        {
-            Name = entry.Display,
-            Description = entry.Description,
-            TypeId = entry.TypeId,
-            AttributeId = entry.AttributeId
-        };
-
+        entity.Name = entry.Display;
+        entity.Description = entry.Description;
+        
         Set.Update(entity: entity);
 
         if (await Context.SaveChangesAsync() < 1)
