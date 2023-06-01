@@ -16,10 +16,7 @@ public class ApiRepository : IApiRepository
     {
         get
         {
-            return new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            return new(JsonSerializerDefaults.Web);
         }
     }
 
