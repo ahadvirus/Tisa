@@ -26,6 +26,7 @@
     <Folder Include="Data\Repositories\Persistences\Apis\" />
     <Folder Include="Infrastructures\Middlewares\" />
     <Folder Include="Models\ViewModels\Attributes\" />
+    <Folder Include="Models\ViewModels\Shared\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,11 +35,21 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Attributes\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Attributes\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Components\SearchForm\Default.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Attributes\Create.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Shared\Components\SearchForm\Default.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Attributes\Edit.cshtml" />
   </ItemGroup>
 
 </Project>
