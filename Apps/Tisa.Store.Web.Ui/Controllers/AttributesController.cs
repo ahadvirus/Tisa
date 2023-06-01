@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tisa.Store.Web.Ui.Data.Repositories.Contracts;
@@ -20,14 +21,14 @@ public class AttributesController : Controller
     // GET
     public async Task<IActionResult> Index([FromQuery] Models.ViewModels.Search.RequestVm request)
     {
-        Func<Models.DataTransfers.AttributeDto, bool>? predicate = null;
+        Expression<Func<AttributeDto, bool>>? predicate = null;
 
         if (!string.IsNullOrEmpty(request.Query))
         {
             predicate = dto => dto.Display.Contains(request.Query);
         }
 
-        return View(model: new Models.ViewModels.Search.ResponseVm<Models.DataTransfers.AttributeDto>(
+        return View(model: new Models.ViewModels.Search.ResponseVm<AttributeDto>(
             results: await Repository.GetAsync(predicate: predicate)
             )
         {
@@ -35,10 +36,65 @@ public class AttributesController : Controller
         });
     }
 
-    public IActionResult Edit([FromRoute] int? id)
+    public async Task<IActionResult> Edit([FromRoute] int? id)
     {
-        
-        return RedirectToAction(nameof(Index));
+        IActionResult result = RedirectToAction(nameof(Index));
+
+        if (id != null && await Repository.ExistAsync(id: id.Value))
+        {
+            AttributeDto? entity = await Repository.GetAsync(id: id.Value);
+
+            if (entity != null)
+            {
+                EditVm model = new EditVm()
+                {
+                    Id = entity.Id,
+                    Display = entity.Display,
+                    Description = entity.Description
+                };
+                result = View(model: model);
+            }
+
+            
+        }
+
+        return result;
+    }
+
+    [ValidateAntiForgeryToken]
+    [ActionName(name: nameof(Edit))]
+    [HttpPost]
+    public async Task<IActionResult> EditConfirmed(
+        [Bind(include: new string[]
+            { nameof(EditVm.Id), nameof(EditVm.Display), nameof(EditVm.Description) })
+        ]
+        EditVm entry
+    )
+    {
+        IActionResult result = View(model: entry);
+
+        if (ModelState.IsValid)
+        {
+            AttributeDto entity = new AttributeDto()
+            {
+                Id = entry.Id,
+                Display = entry.Display,
+                Description = entry.Description,
+            };
+
+            try
+            {
+                await Repository.UpdateAsync(entity);
+                result = RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            
+        }
+
+        return result;
     }
 
     public IActionResult Create()
