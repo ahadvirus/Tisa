@@ -1,0 +1,33 @@
+﻿@model Models.ViewModels.Shared.PageHeader
+
+@if (Model.Title != null && (Model.Title is string || Model.Title.GetType() == typeof(LocalizedHtmlString)))
+{
+    <!-- Page header -->
+    <div class="bg-white shadow">
+        <div class="px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
+            <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+                <div class="min-w-0 flex-1">
+                    <!-- Profile -->
+                    <div class="flex items-center">
+                        <div>
+                            <div class="flex items-center">
+                                <h1 class="mr-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
+                                    @Model.Title
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.HaveCreateButton)
+                {
+                    <div class="mt-6 flex space-x-3 space-x-reverse md:mt-0 md:mr-4">
+                        <a href="@Html.Raw(!string.IsNullOrEmpty(Model.CreateButtonLink) ? Model.CreateButtonLink : Url.Action(action: nameof(View.Create), controller: (string)ViewContext.RouteData.Values[key: nameof(Controller).ToLower()]!))"
+                           class="inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2">
+                            @(Model.CreateButtonTitle != null ? ((Model.CreateButtonTitle.GetType() == typeof(string) || Model.CreateButtonTitle.GetType() == typeof(LocalizedHtmlString)) ? Model.CreateButtonTitle : ViewLocalizer["CreateButton"]) : ViewLocalizer["CreateButton"])
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
