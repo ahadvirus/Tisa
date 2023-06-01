@@ -1,7 +1,7 @@
-﻿@model Models.ViewModels.Attributes.CreateVm
+﻿@model Models.ViewModels.Attributes.EditVm
 
 @{
-    ViewData[index: nameof(View.Title)] = ViewLocalizer[name: nameof(View.Title)];
+    ViewData[index: nameof(View.Title)] = ViewLocalizer[name: nameof(View.Title), arguments: new object[] { Model.Display }];
 
     await Html.RenderPartialAsync(partialViewName: "_PageHeader", model: new PageHeader() { Title = ViewData[index: nameof(View.Title)], HaveCreateButton = false });
 }
@@ -13,6 +13,7 @@
         htmlAttributes: new { @class = "mt-6 grid grid-cols-1 gap-4" }))
         {
             @Html.AntiForgeryToken()
+            @Html.HiddenFor(expression: model => model.Id)
 
             <div class="sm:col-span-2">
                 @Html.LabelFor(expression: model => model.Display, htmlAttributes: new { @class = "block text-xl font-medium text-warm-gray-900" })
@@ -30,8 +31,6 @@
                 @Html.ValidationMessageFor(expression: model => model.Description, message: string.Empty, htmlAttributes: new Dictionary<string, object>( collection: new KeyValuePair<string, object>[]{ new KeyValuePair<string, object>("class", "mt-2 text-sm text-red-500") } ), tag: "p")
             </div>
 
-            @await Component.InvokeAsync(name: nameof(TypeDropdownViewComponent).RemoveViewComponent(), arguments: new { selected = Model != null ? Model.Type : 0, input = nameof(Model.Type) } )
-
             <div class="sm:col-span-2 sm:flex sm:justify-end">
                 <button type="submit" class="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-teal-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:w-auto">
                     @ViewLocalizer["SubmitButton"]
@@ -40,3 +39,4 @@
         }
     </div>
 </div>
+

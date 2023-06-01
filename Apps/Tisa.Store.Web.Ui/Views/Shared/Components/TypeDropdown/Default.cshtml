@@ -14,10 +14,12 @@
             args: new object?[] { (item.Key - 1), item.Value }
             ))
         );
+
+    int selected = Model.Selected == 0 ? Model.Selected : Model.Selected - 1;
 }
 
 <div class="sm:col-span-2">
-    <div x-data="Components.listbox({ modelName: 'selected', open: false, selectedIndex: @Html.Raw(Model.Selected), activeIndex: @Html.Raw(value: Model.Selected), items: [@Html.Raw(value: alpineData)] })" x-init="init()">
+    <div x-data="Components.listbox({ modelName: 'selected', open: false, selectedIndex: @Html.Raw(value: selected), activeIndex: @Html.Raw(value: selected), items: [@Html.Raw(value: alpineData)] })" x-init="init()">
         @Html.Hidden(expression: Model.Input, value: Model.Selected, htmlAttributes: htmlAttributes)
         @Html.Label(expression: Model.Input, labelText: ViewLocalizer["Label"].Value, htmlAttributes: new { id="listbox-label", @class="block text-xl font-medium text-gray-700", click="$refs.button.focus()" })
         <div class="relative mt-2">
